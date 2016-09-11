@@ -4,26 +4,34 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.zzh.music.MusicApplication;
+import com.zzh.music.R;
+import com.zzh.music.utils.SystemStatusManager;
+
+import cn.zzh.lib.app.SwipeBackActivity;
 
 /**
  * Created by zzh on 2016/1/29.
- * 对BaseActivity的一些封装：
- * 全局Context
- * Handler
- * Toast
- * 初始化View控件
- * 初始化数据
- * 给控件设置监听事件
+ * 对BaseActivity的一些封装：<br />
+ * 全局Context<br />
+ * Handler<br />
+ * Toast<br />
+ * 初始化View控件<br />
+ * 初始化数据<br />
+ * 给控件设置监听事件<br />
+ * 滑动退出当前页面<br />
  */
-public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
+public abstract class BaseActivity extends SwipeBackActivity implements View.OnClickListener {
     protected static String TAG;
     protected Context mContext;
     protected BaseHandler mHandler;
@@ -31,11 +39,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected BaseReceiver mReceiver;
     protected IntentFilter mFilter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TAG = this.getLocalClassName();
+        MusicApplication.mAllStartActivity.add(this);
         mContext = this;
         if (mHandler == null)
             mHandler = new BaseHandler();
@@ -45,7 +53,26 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             mFilter = new IntentFilter();
         initBroadCast();
         mContext.registerReceiver(mReceiver, mFilter);
+        //setStatusBarTint();
     }
+
+    //
+    protected void setStatusBarTint(){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                // 透明状态栏
+                getWindow().addFlags(
+                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                // 透明导航栏
+//            getWindow().addFlags(
+//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+                SystemStatusManager tintManager = new SystemStatusManager(this);
+                tintManager.setStatusBarTintEnabled(true);
+                // 设置状态栏的颜色
+                tintManager.setStatusBarTintResource(R.color.theme_color);
+                getWindow().getDecorView().setFitsSystemWindows(true);
+            }
+    }
+
 
     private void initBroadCast() {
         //mFilter.addAction();
@@ -131,6 +158,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        MusicApplication.mAllStartActivity.remove(this);
         if (mReceiver != null)
             mContext.unregisterReceiver(mReceiver);
     }

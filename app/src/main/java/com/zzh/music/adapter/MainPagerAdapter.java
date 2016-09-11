@@ -20,7 +20,7 @@ import java.util.List;
  * @Description:
  */
 public class MainPagerAdapter extends FragmentStatePagerAdapter {
-    private List<Fragment> dataList;
+    private List<BaseFragment> dataList;
 
     private Context mContext;
 
@@ -44,7 +44,7 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
         return ((BaseFragment)getItem(position)).getTitle();
     }
 
-    public void add(Fragment fragment){
+    public void add(BaseFragment fragment){
         dataList.add(fragment);
     }
 
@@ -54,7 +54,7 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
     public void delete(Fragment fragment){
         dataList.remove(fragment);
     }
-    public void addAll(List<Fragment> list){
+    public void addAll(List<BaseFragment> list){
         dataList.addAll(list);
     }
 }

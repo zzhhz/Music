@@ -1,5 +1,6 @@
 package com.zzh.music.base;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,10 +15,12 @@ import android.view.ViewGroup;
  */
 public abstract class BaseFragment extends Fragment {
     protected BaseHandler mHandler;
+    protected Context mContext;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mHandler = new BaseHandler();
+        mContext = getActivity();
         super.onCreate(savedInstanceState);
     }
 
@@ -29,6 +32,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void initView(View fragment);
     protected abstract void initData();
+    public abstract void setViewListener();
 
     private class BaseHandler extends Handler{
         @Override
@@ -43,5 +47,4 @@ public abstract class BaseFragment extends Fragment {
      */
     protected abstract void handlerMessage(Message msg);
     public abstract String getTitle();
-
 }

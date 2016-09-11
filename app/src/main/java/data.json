@@ -1,0 +1,9 @@
+//获取音乐专辑的信息
+{
+  "status":1,
+  "content":[
+    {"type":1,"musicName":"name","musicUrl":"name","musicDesc":"name","musicTag":"name"},
+    {"type":1,"musicName":"name","musicUrl":"name","musicDesc":"name","musicTag":"name"},
+    {"type":1,"musicName":"name","musicUrl":"name","musicDesc":"name","musicTag":"name"}
+  ]
+}
