@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -17,6 +18,7 @@ import com.zzh.music.activity.ContactActivity;
 import com.zzh.music.adapter.MainPagerAdapter;
 import com.zzh.music.base.BaseNoSwipeBackActivity;
 import com.zzh.music.fragment.AlbumFragment;
+import com.zzh.music.fragment.HomeFragment;
 import com.zzh.music.fragment.RecommendFragment;
 import com.zzh.music.widget.ZZHDialog;
 
@@ -33,6 +35,7 @@ public class MainActivity extends BaseNoSwipeBackActivity {
     //推荐
     private RecommendFragment mRecommendFragment;
     private AlbumFragment mAlbumFragment;
+    private HomeFragment mHomeFragment;
     //侧滑菜单的头布局
     private RelativeLayout mHeaderViewLayout;
 
@@ -66,10 +69,14 @@ public class MainActivity extends BaseNoSwipeBackActivity {
     protected void initData() {
         mRecommendFragment = new RecommendFragment();
         mAlbumFragment = new AlbumFragment();
+        mHomeFragment = new HomeFragment();
         mAdapter.add(mRecommendFragment);
+        mAdapter.add(mHomeFragment);
         mAdapter.add(mAlbumFragment);
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+        //默认是第2个选中
+        mViewPager.setCurrentItem(1);
     }
 
     @Override
@@ -120,5 +127,13 @@ public class MainActivity extends BaseNoSwipeBackActivity {
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+
+        if (hasFocus){
+            Log.e("", "onGlobalLayout: 4-------------hui zhi wan cheng -------"+mViewPager.getHeight());
+        }
     }
 }

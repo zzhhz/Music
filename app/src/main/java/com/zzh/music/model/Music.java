@@ -1,5 +1,6 @@
 package com.zzh.music.model;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -23,6 +24,36 @@ public class Music implements Parcelable{
     private String musicArtist;
     private int musicDuration;
     private String musicAlbum;//专辑
+    private long musicAlbumId;//专辑
+    private String musicTitle;//专辑
+    private Bitmap mBitmapAlbum;
+
+    private int width;
+    private int height;
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public long getId() {
         return id;
@@ -38,38 +69,6 @@ public class Music implements Parcelable{
 
     public void setMusicSize(long musicSize) {
         this.musicSize = musicSize;
-    }
-
-    public String getMusicArtist() {
-        return musicArtist;
-    }
-
-    public void setMusicArtist(String musicArtist) {
-        this.musicArtist = musicArtist;
-    }
-
-    public int getMusicDuration() {
-        return musicDuration;
-    }
-
-    public void setMusicDuration(int musicDuration) {
-        this.musicDuration = musicDuration;
-    }
-
-    public String getMusicAlbum() {
-        return musicAlbum;
-    }
-
-    public void setMusicAlbum(String musicAlbum) {
-        this.musicAlbum = musicAlbum;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public String getMusicName() {
@@ -104,6 +103,54 @@ public class Music implements Parcelable{
         this.musicTag = musicTag;
     }
 
+    public String getMusicArtist() {
+        return musicArtist;
+    }
+
+    public void setMusicArtist(String musicArtist) {
+        this.musicArtist = musicArtist;
+    }
+
+    public int getMusicDuration() {
+        return musicDuration;
+    }
+
+    public void setMusicDuration(int musicDuration) {
+        this.musicDuration = musicDuration;
+    }
+
+    public String getMusicAlbum() {
+        return musicAlbum;
+    }
+
+    public void setMusicAlbum(String musicAlbum) {
+        this.musicAlbum = musicAlbum;
+    }
+
+    public long getMusicAlbumId() {
+        return musicAlbumId;
+    }
+
+    public void setMusicAlbumId(long musicAlbumId) {
+        this.musicAlbumId = musicAlbumId;
+    }
+
+    public String getMusicTitle() {
+        return musicTitle;
+    }
+
+    public void setMusicTitle(String musicTitle) {
+        this.musicTitle = musicTitle;
+    }
+
+    public Bitmap getBitmapAlbum() {
+        return mBitmapAlbum;
+    }
+
+    public void setBitmapAlbum(Bitmap bitmapAlbum) {
+        mBitmapAlbum = bitmapAlbum;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -121,6 +168,9 @@ public class Music implements Parcelable{
         dest.writeString(this.musicArtist);
         dest.writeInt(this.musicDuration);
         dest.writeString(this.musicAlbum);
+        dest.writeLong(this.musicAlbumId);
+        dest.writeString(this.musicTitle);
+        dest.writeParcelable(this.mBitmapAlbum, flags);
     }
 
     public Music() {
@@ -137,6 +187,9 @@ public class Music implements Parcelable{
         this.musicArtist = in.readString();
         this.musicDuration = in.readInt();
         this.musicAlbum = in.readString();
+        this.musicAlbumId = in.readLong();
+        this.musicTitle = in.readString();
+        this.mBitmapAlbum = in.readParcelable(Bitmap.class.getClassLoader());
     }
 
     public static final Creator<Music> CREATOR = new Creator<Music>() {
