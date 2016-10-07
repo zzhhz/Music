@@ -85,7 +85,6 @@ public class MainActivity extends BaseNoSwipeBackActivity {
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                showMessage("-------------");
                 return false;
             }
         });

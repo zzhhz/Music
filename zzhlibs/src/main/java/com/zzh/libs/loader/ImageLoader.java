@@ -1,4 +1,4 @@
-package com.zzh.music.loader;
+package com.zzh.libs.loader;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -15,8 +15,6 @@ import android.util.DisplayMetrics;
 import android.util.LruCache;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import com.zzh.music.R;
 
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
@@ -463,7 +461,7 @@ public class ImageLoader {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inPreferredConfig = Bitmap.Config.RGB_565;
         // BitmapFactory.decodeStream(context.getResources().getDrawable(R.mipmap.ic_launcher), null, opts);
-        return BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher, opts);
+        return BitmapFactory.decodeResource(context.getResources(), -1, opts);
     }
 
     private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");

@@ -1,12 +1,14 @@
 <resources>
 
     <style name="AppTheme" parent="BaseAppTheme" >
-        <item name="android:windowTranslucentStatus">true</item>
+        <!--这里暂时用不上这三个属性-->
+        <!--<item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@color/colorGlobe</item>
+        <item name="android:statusBarColor">@color/colorGlobe</item>-->
         <!--没有actionbar-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
     </style>
 
 </resources>

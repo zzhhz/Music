@@ -16,7 +16,7 @@ import android.os.Parcelable;
 public class Music implements Parcelable{
     private int type; //类型,1.音乐; 2.专辑; 3...
     private long id;
-    private long musicSize;
+    private long musicSize;//音乐大小
     private String musicName; //名称
     private String musicUrl; //封面
     private String musicDesc; //描述

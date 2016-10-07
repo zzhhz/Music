@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.zzh.music.R;
-import com.zzh.music.activity.DetailActivity;
+import com.zzh.music.activity.MusicPlayerActivity;
 import com.zzh.music.holder.HomeViewHolder;
 import com.zzh.music.loader.ImageLoader;
 import com.zzh.music.model.Music;
@@ -69,8 +69,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, DetailActivity.class);
-                intent.putExtra(DetailActivity.TYPE_FRAGMENT, DetailActivity.TYPE_FRAGMENT_ALBUM_DETAIL);
+                Intent intent = new Intent(mContext, MusicPlayerActivity.class);
+                //intent.putExtra(DetailActivity.TYPE_FRAGMENT, DetailActivity.TYPE_FRAGMENT_ALBUM_DETAIL);
                 mContext.startActivity(intent);
             }
         });

@@ -6,4 +6,5 @@
     <color name="theme_color">#FF0000</color>
     <color name="baseColor">#a31919e6</color>
     <color name="colorGlobe">#9c27b0</color>
+    <color name="color_white_title">#ffffff</color>
 </resources>

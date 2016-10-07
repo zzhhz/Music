@@ -17,7 +17,6 @@ import com.zzh.music.base.BaseFragment;
 import com.zzh.music.model.Music;
 import com.zzh.music.utils.MusicLoader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,14 +60,6 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        //
-        List<Music> list = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
-            Music music = new Music();
-            list.add(music);
-        }
-        mAdapter.addAll(list);
-        mAdapter.notifyDataSetChanged();
         //请求权限
         super.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 10001);
     }
@@ -90,7 +81,10 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.e("---", "onRequestPermissionsResult: -----------------" );
+        //Log.e("---", "onRequestPermissionsResult: -----------------" );
+        switch (requestCode){
+
+        }
     }
 
     @Override
