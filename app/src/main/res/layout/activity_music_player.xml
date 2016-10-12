@@ -20,8 +20,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/colorGlobe"
-        >
+        android:background="@color/colorGlobe">
 
+        <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/button2"/>
     </RelativeLayout>
 </LinearLayout>

@@ -53,9 +53,9 @@ public class MusicLoader {
             Media.DURATION,
             Media.SIZE,
             Media.TITLE,
-            Media.ALBUM_ID
+            Media.ALBUM_ID,
     };
-    private String where =  "mime_type in ('audio/mpeg','audio/x-ms-wma') and _display_name <> 'audio' and is_music > 0 " ;
+    private String where =  "mime_type in ('audio/mpeg','audio/x-ms-wma') and _display_name <> 'audio' and is_music > 0" ;
     private String sortOrder = Media.DATA;
 
     public static MusicLoader getInstance(Context ctx){
@@ -74,8 +74,29 @@ public class MusicLoader {
     private MusicLoader(){                                                                                                             //利用ContentResolver的query函数来查询数据，然后将得到的结果放到MusicInfo对象中，最后放到数组中
     }
 
-    public List<Music> getMusicList(){
-        Cursor cursor = contentResolver.query(contentUri, projection, where, null, sortOrder);
+    public List<Music> getMusicList(int pageNum){
+        return getMusicList(pageNum, 10);
+    }
+
+    /**
+     *
+     * @param pageNum 页数，默认0
+     * @param pageSize 行数,默认10行
+     * @return
+     */
+    public List<Music> getMusicList(int pageNum, int pageSize){
+
+        if (pageNum <1){
+            pageNum = 1;
+        }
+        if (pageSize < 0)
+        {
+            pageSize = 10;
+        }
+
+        int count = pageNum * pageSize - 1;
+
+        Cursor cursor = contentResolver.query(contentUri, projection, where, null, sortOrder+" ASC LIMIT "+count+" , "+pageSize);
         //清空集合
         musicList.clear();
         if(cursor == null){

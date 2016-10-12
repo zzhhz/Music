@@ -1,8 +1,11 @@
 package com.zzh.music;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -21,6 +24,9 @@ import com.zzh.music.fragment.AlbumFragment;
 import com.zzh.music.fragment.HomeFragment;
 import com.zzh.music.fragment.RecommendFragment;
 import com.zzh.music.widget.ZZHDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BaseNoSwipeBackActivity {
     private Toolbar mToolbar;
@@ -134,5 +140,33 @@ public class MainActivity extends BaseNoSwipeBackActivity {
         if (hasFocus){
             Log.e("", "onGlobalLayout: 4-------------hui zhi wan cheng -------"+mViewPager.getHeight());
         }
+    }
+
+    public List<ContactInfo> getContactsByPage(int pageSize, int currentOffset) {
+
+        List<ContactInfo> infos=new ArrayList<ContactInfo>();
+        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+        String[] projection = { ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone.DATA1, "sort_key"};
+        Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, "sort_key COLLATE LOCALIZED asc limit " + pageSize + " offset " + currentOffset);
+        if (cursor != null) {
+
+            while (cursor.moveToNext()) {
+
+                ContactInfo info=new ContactInfo();
+                String contactName = cursor.getString(0);
+                String phoneNumber = cursor.getString(1);
+                infos.add(info);
+                info=null;
+            }
+            cursor.close();
+
+
+        }
+        return infos;
+    }
+
+    class ContactInfo{
+
     }
 }

@@ -26,6 +26,7 @@ import com.zzh.music.service.MusicService;
  * @Description: 音乐详情的界面,单独拿出一个activity,用来展示播放音乐播放界面。
  */
 public class MusicPlayerActivity extends BaseActivity {
+    public static final String DATA_MUSIC_PLAYER = "data";
     private Music mMusic;
     private TextView mTitleText;//标题
     private Toolbar mToolbar;
@@ -55,13 +56,18 @@ public class MusicPlayerActivity extends BaseActivity {
     @Override
     protected void initView() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mTitleText = (TextView) mToolbar.findViewById(R.id.tv_title);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
+        findViewById(R.id.button2).setOnClickListener(this);
         //
     }
 
     @Override
     protected void initData() {
+        Intent intentMusic = getIntent();
+        mMusic = intentMusic.getParcelableExtra(DATA_MUSIC_PLAYER);
+
         //启动音乐播放服务
         Intent intent = new Intent(mContext, MusicService.class);
         intent.putExtra("data", mMusic);
@@ -81,6 +87,14 @@ public class MusicPlayerActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
 
+        switch (v.getId()){
+            case R.id.button2:
+                loge(mToolbar.getPaddingLeft()+"");
+                loge(mToolbar.getPaddingTop()+"");
+                loge(mToolbar.getPaddingRight()+"");
+                loge(mToolbar.getPaddingBottom()+"");
+                break;
+        }
     }
 
     @Override

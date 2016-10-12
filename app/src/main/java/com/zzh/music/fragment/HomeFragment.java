@@ -66,7 +66,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void doNextPermission() {
-        List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList();
+        List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList(0);
         Log.d(TAG, "------musicList-----: "+musicList.size());
         mAdapter.clear();
         mAdapter.addAll(musicList);

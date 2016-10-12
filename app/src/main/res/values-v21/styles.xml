@@ -8,6 +8,8 @@
         <!--没有actionbar-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <!--激活转场元素-->
+        <item name="android:windowContentTransitions">true</item>
 
     </style>
 

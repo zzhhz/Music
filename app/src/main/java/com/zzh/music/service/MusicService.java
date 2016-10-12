@@ -6,7 +6,8 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 
-import com.zzh.music.helper.MusicPlayer;
+import com.zzh.music.activity.MusicPlayerActivity;
+import com.zzh.music.model.Music;
 
 /**
  * Created by ZZH on 16/9/28
@@ -21,12 +22,13 @@ public class MusicService extends Service {
 
     private IBinder mIBinder = null;
     private MediaPlayer mMediaPlayer = null;
+    private Music mMusic;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mMediaPlayer = MusicPlayer.getInstance();
+        mMediaPlayer = new MediaPlayer();
         mIBinder = new MusicBinder(this);
     }
 
@@ -36,6 +38,7 @@ public class MusicService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         //播放音乐
+        mMusic = intent.getParcelableExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER);
         return mIBinder;
     }
 
@@ -58,6 +61,11 @@ public class MusicService extends Service {
     @Override
     public boolean onUnbind(Intent intent) {
         return super.onUnbind(intent);
+    }
+
+    public int getMusicPositionPlayer(){
+
+        return 0;
     }
 
 

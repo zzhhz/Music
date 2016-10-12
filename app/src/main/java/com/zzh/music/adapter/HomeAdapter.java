@@ -1,8 +1,13 @@
 package com.zzh.music.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,20 +63,26 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(HomeViewHolder holder, int position) {
-        Music item = dataList.get(position);
+    public void onBindViewHolder(final HomeViewHolder holder, int position) {
+        final Music item = dataList.get(position);
         holder.musicMsg.setText(item.describeContents()+"");
         holder.musicTitle.setText(item.getMusicTitle());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(item.getWidth(), item.getHeight());
         holder.musicAlbum.setLayoutParams(params);
-//        holder.musicAlbum.setImageBitmap(item.getBitmapAlbum());
         ImageLoader.getInstance(mContext).loadImageUri(item.getId(),item.getMusicAlbumId(), holder.musicAlbum);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MusicPlayerActivity.class);
                 //intent.putExtra(DetailActivity.TYPE_FRAGMENT, DetailActivity.TYPE_FRAGMENT_ALBUM_DETAIL);
-                mContext.startActivity(intent);
+                intent.putExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER, item);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ){
+                    Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, Pair.create((View)holder.musicTitle, "tv_title")).toBundle();
+                    mContext.startActivity(intent, bundle);
+                } else {
+                    mContext.startActivity(intent);
+                }
+
             }
         });
     }
