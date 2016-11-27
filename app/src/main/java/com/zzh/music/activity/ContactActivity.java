@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.zzh.libs.interfaces.OnItemClickListener;
 import com.zzh.libs.side.bar.SideBar;
 import com.zzh.libs.widget.AlertView;
-import com.zzh.libs.widget.HRecyclerView;
+import com.zzh.libs.widget.ZRecyclerView;
 import com.zzh.music.R;
 import com.zzh.music.adapter.ContactsAdapter;
 import com.zzh.music.base.BaseActivity;
@@ -39,7 +39,7 @@ public class ContactActivity extends BaseActivity {
     private AlertView mAlertView;
     //private ObservableListView mListView;
     //ArrayAdapter<String> mAdapter = null;
-    private HRecyclerView mHRecyclerView;
+    private ZRecyclerView mZRecyclerView;
     TextView tv;
     SideBar mSideBar;
     ContactsAdapter mContactsAdapter;
@@ -56,7 +56,7 @@ public class ContactActivity extends BaseActivity {
     protected void initView() {
         tv = (TextView) findViewById(R.id.tv);
         mSideBar = (SideBar) findViewById(R.id.sideBar);
-        mHRecyclerView = (HRecyclerView) findViewById(R.id.lv_contacts);
+        mZRecyclerView = (ZRecyclerView) findViewById(R.id.lv_contacts);
         mAlertView = new AlertView(mContext, null, "请稍后...", null, new String[]{}, null, AlertView.Style.Alert, new OnItemClickListener() {
             @Override
             public void onItemClick(Object obj, int position) {
@@ -70,8 +70,8 @@ public class ContactActivity extends BaseActivity {
         mSideBar.setTextView(tv);
         mLayoutManager = new LinearLayoutManager(mContext);
         mContactsAdapter = new ContactsAdapter(mContext);
-        mHRecyclerView.setLayoutManager(mLayoutManager);
-        mHRecyclerView.setAdapter(mContactsAdapter);
+        mZRecyclerView.setLayoutManager(mLayoutManager);
+        mZRecyclerView.setAdapter(mContactsAdapter);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_CONTACTS},

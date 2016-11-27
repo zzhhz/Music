@@ -35,7 +35,7 @@
             </RelativeLayout>
         </android.support.design.widget.AppBarLayout>
 
-        <com.zzh.libs.widget.HRecyclerView
+        <com.zzh.libs.widget.ZRecyclerView
             android:id="@+id/lv_contacts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

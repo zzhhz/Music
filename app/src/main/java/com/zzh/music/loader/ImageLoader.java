@@ -32,6 +32,7 @@ import java.util.concurrent.Semaphore;
  * 加载图片工具类
  */
 public class ImageLoader {
+    public static final int IMAGE_LOADER_FROM_URI = 1000;
     private static ImageLoader mInstance;
     /**
      * 图片缓存的核心对象

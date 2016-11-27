@@ -15,24 +15,28 @@ import android.view.MotionEvent;
  * @Author: zzh
  * @Description: 自定义的RecyclerView, 主要用于下拉刷新,和加载更多; 添加了一个监听上滑还是下滑的事件
  */
-public class HRecyclerView extends RecyclerView{
+public class ZRecyclerView extends RecyclerView{
     private static final String TAG = "HRecyclerView";
     private float pressY = 0;
     private OnItemScrollListener mOnItemScrollListener;
-    public HRecyclerView(Context context) {
+    public ZRecyclerView(Context context) {
         super(context);
     }
 
-    public HRecyclerView(Context context, @Nullable AttributeSet attrs) {
+    public ZRecyclerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public HRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
+    public ZRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+        if (!isEnabled()){
+            return isClickable() || isLongClickable();
+        }
+
         switch (e.getAction()){
             case MotionEvent.ACTION_DOWN:
                 pressY = e.getY();

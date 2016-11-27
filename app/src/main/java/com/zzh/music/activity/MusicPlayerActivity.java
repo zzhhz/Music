@@ -59,14 +59,14 @@ public class MusicPlayerActivity extends BaseActivity {
         mTitleText = (TextView) mToolbar.findViewById(R.id.tv_title);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
-        findViewById(R.id.button2).setOnClickListener(this);
+
         //
     }
 
     @Override
     protected void initData() {
         Intent intentMusic = getIntent();
-        mMusic = intentMusic.getParcelableExtra(DATA_MUSIC_PLAYER);
+        mMusic = (Music) intentMusic.getSerializableExtra(DATA_MUSIC_PLAYER);
 
         //启动音乐播放服务
         Intent intent = new Intent(mContext, MusicService.class);
@@ -76,7 +76,9 @@ public class MusicPlayerActivity extends BaseActivity {
 
     @Override
     protected void initSetListener() {
-
+        findViewById(R.id.btn_last_songs).setOnClickListener(this);
+        findViewById(R.id.btn_next_songs).setOnClickListener(this);
+        findViewById(R.id.btn_player_stop).setOnClickListener(this);
     }
 
     @Override
@@ -88,11 +90,17 @@ public class MusicPlayerActivity extends BaseActivity {
     public void onClick(View v) {
 
         switch (v.getId()){
-            case R.id.button2:
+            case R.id.btn_last_songs:
                 loge(mToolbar.getPaddingLeft()+"");
                 loge(mToolbar.getPaddingTop()+"");
                 loge(mToolbar.getPaddingRight()+"");
                 loge(mToolbar.getPaddingBottom()+"");
+                break;
+            case R.id.btn_next_songs:
+                break;
+            case R.id.btn_player_stop:
+                break;
+            default:
                 break;
         }
     }

@@ -1,8 +1,8 @@
 package com.zzh.music.model;
 
 import android.graphics.Bitmap;
-import android.os.Parcel;
-import android.os.Parcelable;
+
+import java.io.Serializable;
 
 /**
  * Created by ZZH on 16/6/15.
@@ -13,7 +13,7 @@ import android.os.Parcelable;
  * @Author: zzh
  * @Description: 专辑,音乐实体类
  */
-public class Music implements Parcelable{
+public class Music implements Serializable{
     private int type; //类型,1.音乐; 2.专辑; 3...
     private long id;
     private long musicSize;//音乐大小
@@ -143,64 +143,7 @@ public class Music implements Parcelable{
         this.musicTitle = musicTitle;
     }
 
-    public Bitmap getBitmapAlbum() {
-        return mBitmapAlbum;
-    }
-
-    public void setBitmapAlbum(Bitmap bitmapAlbum) {
-        mBitmapAlbum = bitmapAlbum;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.type);
-        dest.writeLong(this.id);
-        dest.writeLong(this.musicSize);
-        dest.writeString(this.musicName);
-        dest.writeString(this.musicUrl);
-        dest.writeString(this.musicDesc);
-        dest.writeString(this.musicTag);
-        dest.writeString(this.musicArtist);
-        dest.writeInt(this.musicDuration);
-        dest.writeString(this.musicAlbum);
-        dest.writeLong(this.musicAlbumId);
-        dest.writeString(this.musicTitle);
-        dest.writeParcelable(this.mBitmapAlbum, flags);
-    }
-
     public Music() {
     }
 
-    protected Music(Parcel in) {
-        this.type = in.readInt();
-        this.id = in.readLong();
-        this.musicSize = in.readLong();
-        this.musicName = in.readString();
-        this.musicUrl = in.readString();
-        this.musicDesc = in.readString();
-        this.musicTag = in.readString();
-        this.musicArtist = in.readString();
-        this.musicDuration = in.readInt();
-        this.musicAlbum = in.readString();
-        this.musicAlbumId = in.readLong();
-        this.musicTitle = in.readString();
-        this.mBitmapAlbum = in.readParcelable(Bitmap.class.getClassLoader());
-    }
-
-    public static final Creator<Music> CREATOR = new Creator<Music>() {
-        @Override
-        public Music createFromParcel(Parcel source) {
-            return new Music(source);
-        }
-
-        @Override
-        public Music[] newArray(int size) {
-            return new Music[size];
-        }
-    };
 }

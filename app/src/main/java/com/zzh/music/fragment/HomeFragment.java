@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.zzh.libs.widget.HRecyclerView;
+import com.zzh.libs.widget.ZRecyclerView;
 import com.zzh.music.R;
 import com.zzh.music.adapter.HomeAdapter;
 import com.zzh.music.base.BaseFragment;
@@ -26,11 +25,10 @@ import java.util.List;
  * @Email: zzh_hz@126.com
  * @QQ: 1299234582
  * @Author: zzh
- * @Description: 首页
+ * @Description: 首页, 瀑布流式的展示效果
  */
 public class HomeFragment extends BaseFragment {
-
-    private HRecyclerView mRecommend;
+    private ZRecyclerView mRecommend;
     private HomeAdapter mAdapter;
     private StaggeredGridLayoutManager mManager;
 
@@ -51,7 +49,7 @@ public class HomeFragment extends BaseFragment {
     //初始化控件
     @Override
     protected void initView(View fragment) {
-        mRecommend = (HRecyclerView) fragment.findViewById(R.id.recyclerView_home);
+        mRecommend = (ZRecyclerView) fragment.findViewById(R.id.recyclerView_home);
         mManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mAdapter = new HomeAdapter(mContext);
         mRecommend.setLayoutManager(mManager);
@@ -67,7 +65,6 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void doNextPermission() {
         List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList(0);
-        Log.d(TAG, "------musicList-----: "+musicList.size());
         mAdapter.clear();
         mAdapter.addAll(musicList);
         mAdapter.notifyDataSetChanged();
@@ -81,7 +78,6 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        //Log.e("---", "onRequestPermissionsResult: -----------------" );
         switch (requestCode){
 
         }

@@ -65,7 +65,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeViewHolder> {
     @Override
     public void onBindViewHolder(final HomeViewHolder holder, int position) {
         final Music item = dataList.get(position);
-        holder.musicMsg.setText(item.describeContents()+"");
+        holder.musicMsg.setText(item.getMusicDuration()+"");
         holder.musicTitle.setText(item.getMusicTitle());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(item.getWidth(), item.getHeight());
         holder.musicAlbum.setLayoutParams(params);
@@ -74,10 +74,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MusicPlayerActivity.class);
-                //intent.putExtra(DetailActivity.TYPE_FRAGMENT, DetailActivity.TYPE_FRAGMENT_ALBUM_DETAIL);
                 intent.putExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER, item);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ){
-                    Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, Pair.create((View)holder.musicTitle, "tv_title")).toBundle();
+                    Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext,
+                            Pair.create((View)holder.musicTitle, "tv_title")).toBundle();
                     mContext.startActivity(intent, bundle);
                 } else {
                     mContext.startActivity(intent);

@@ -75,7 +75,7 @@ public class MusicLoader {
     }
 
     public List<Music> getMusicList(int pageNum){
-        return getMusicList(pageNum, 10);
+        return getMusicList(pageNum, 8);
     }
 
     /**
@@ -145,8 +145,7 @@ public class MusicLoader {
                     music.setHeight((int) (scale * bitmap.getHeight()));
                     music.setWidth(imageWidth);
                     Log.e(TAG, "scale: "+scale);
-
-                    music.setBitmapAlbum(bitmap);
+                    //music.setBitmapAlbum(bitmap);
                 }
 
 

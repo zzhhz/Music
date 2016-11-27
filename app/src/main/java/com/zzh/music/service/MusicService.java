@@ -38,7 +38,7 @@ public class MusicService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         //播放音乐
-        mMusic = intent.getParcelableExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER);
+        mMusic = (Music) intent.getSerializableExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER);
         return mIBinder;
     }
 
@@ -63,10 +63,9 @@ public class MusicService extends Service {
         return super.onUnbind(intent);
     }
 
+    //音乐播放的位置
     public int getMusicPositionPlayer(){
 
         return 0;
     }
-
-
 }
