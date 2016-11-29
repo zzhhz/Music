@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.zzh.libs.widget.ZRecyclerView;
 import com.zzh.music.R;
 import com.zzh.music.adapter.RecommendAdapter;
@@ -32,6 +33,7 @@ public class RecommendFragment extends BaseFragment {
     private ZRecyclerView mRecommend;
     private RecommendAdapter mAdapter;
     private StaggeredGridLayoutManager mManager;
+    private LRecyclerViewAdapter mViewAdapter;
 
     public RecommendFragment() {
     }
@@ -52,9 +54,11 @@ public class RecommendFragment extends BaseFragment {
     protected void initView(View fragment) {
         mRecommend = (ZRecyclerView) fragment.findViewById(R.id.recommend);
         mManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+
         mAdapter = new RecommendAdapter(mContext);
+        mViewAdapter = new LRecyclerViewAdapter(mAdapter);
         mRecommend.setLayoutManager(mManager);
-        mRecommend.setAdapter(mAdapter);
+        mRecommend.setAdapter(mViewAdapter);
     }
 
     @Override

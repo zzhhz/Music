@@ -5,7 +5,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:padding="0dp"
         android:gravity="center"
@@ -14,8 +14,12 @@
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_back"
-            android:background="@color/cardview_dark_background" />
+            android:padding="5dp"
+            android:background="@mipmap/icon_back"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            android:visibility="gone"/>
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"

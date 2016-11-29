@@ -2,11 +2,11 @@ package com.zzh.music.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.zzh.music.R;
 import com.zzh.music.activity.DetailActivity;
 import com.zzh.music.holder.RecommendViewHolder;
@@ -24,7 +24,7 @@ import java.util.List;
  * @Author: zzh
  * @Description: 推荐页的文件
  */
-public class RecommendAdapter extends RecyclerView.Adapter<RecommendViewHolder> {
+public class RecommendAdapter extends LRecyclerView.Adapter<RecommendViewHolder> {
     private final Context mContext;
     private List<Music> dataList;
 

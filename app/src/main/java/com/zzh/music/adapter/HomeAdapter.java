@@ -4,15 +4,15 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.zzh.music.R;
 import com.zzh.music.activity.MusicPlayerActivity;
 import com.zzh.music.holder.HomeViewHolder;
@@ -32,9 +32,10 @@ import java.util.List;
  * @Author: zzh
  * @Description: 推荐页的文件
  */
-public class HomeAdapter extends RecyclerView.Adapter<HomeViewHolder> {
+public class HomeAdapter extends LRecyclerView.Adapter<HomeViewHolder> {
     private final Context mContext;
     private List<Music> dataList;
+    private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
 
     private int DISPLAY_IMAGE_WIDTH;
 
@@ -67,9 +68,19 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeViewHolder> {
         final Music item = dataList.get(position);
         holder.musicMsg.setText(item.getMusicDuration()+"");
         holder.musicTitle.setText(item.getMusicTitle());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(item.getWidth(), item.getHeight());
-        holder.musicAlbum.setLayoutParams(params);
+        /*LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(item.getWidth(), item.getHeight());
+        holder.musicAlbum.setLayoutParams(params);*/
         ImageLoader.getInstance(mContext).loadImageUri(item.getId(),item.getMusicAlbumId(), holder.musicAlbum);
+        /*Uri uri;
+        if (item.getMusicAlbumId() <= 0){
+            uri = ContentUris.withAppendedId(sArtworkUri, item.getId());
+        } else {
+            uri = ContentUris.withAppendedId(sArtworkUri, item.getMusicAlbumId());
+        }*/
+
+        /*Glide.with(mContext).load(uri).centerCrop().
+                error(R.mipmap.ic_launcher).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.musicAlbum);*/
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

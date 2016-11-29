@@ -10,4 +10,5 @@ package com.zzh.music;
  * @Description: 保存常量
  */
 public class MusicConstants {
+    public static final int PAGE_SIZE = 8;//分页查询，每页默认是8条数据
 }

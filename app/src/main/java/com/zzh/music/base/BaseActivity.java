@@ -21,13 +21,12 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zzh.music.BuildConfig;
 import com.zzh.music.MusicApplication;
 import com.zzh.music.R;
 import com.zzh.music.utils.SystemStatusManager;
 
 import cn.zzh.lib.app.SwipeBackActivity;
-
-import static com.zzh.music.R.id.toolbar;
 
 /**
  * Created by zzh on 2016/1/29.
@@ -49,6 +48,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
     protected IntentFilter mFilter;
     protected Toolbar mToolbar;
     protected TextView toolBarTitle;
+    //权限
     protected static final int REQUEST_CODE_READ_PERMISSION = 2000;
 
     @Override
@@ -84,11 +84,13 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
             getWindow().getDecorView().setFitsSystemWindows(true);
         }
     }
-
-
+    //设置Toolbar
+    protected void toolbars(String title){
+        toolbars(title, null);
+    }
     protected void toolbars(String title, Toolbar.OnClickListener clickListener) {
         try {
-            mToolbar = (Toolbar) findViewById(toolbar);
+            mToolbar = (Toolbar) findViewById(R.id.toolbar);
         } catch (Exception ex) {
             loge("没有设置toolbar");
         }
@@ -193,7 +195,14 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
      * @param msg 日志信息
      */
     protected void loge(String msg) {
-        Log.e(TAG, "------" + msg + "---");
+        if (BuildConfig.DEBUG) {
+            Log.e(TAG, "------" + msg + "---");
+        }
+    }
+    protected void logd(String msg) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "------" + msg + "---");
+        }
     }
 
     @Override
@@ -232,6 +241,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
         }
     }
 
+    //判断是否授予了权限
     protected boolean verifyGrantPermission(String permission){
         boolean result;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -243,6 +253,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
         return result;
     }
 
+    //验证是否申请了权限
     public static boolean verifyPermissions(int[] grantResults) {
         if (grantResults.length < 1) {
             return false;
@@ -261,7 +272,13 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
+        if (verifyPermissions(grantResults)){
+            notifyPermission(requestCode);
+            loge("--");
+        } else {
+            showMessage("请在手机设置中授予应用权限");
+        }
+        /*switch (requestCode){
             case REQUEST_CODE_READ_PERMISSION:
                 boolean verifyPermissions = verifyPermissions(grantResults);
                 loge("-----------"+requestCode+"---"+verifyPermissions);
@@ -269,6 +286,6 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
                     notifyPermission(requestCode);
                 }
                 break;
-        }
+        }*/
     }
 }

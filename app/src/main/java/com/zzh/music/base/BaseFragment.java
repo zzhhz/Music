@@ -26,6 +26,8 @@ public abstract class BaseFragment extends Fragment {
     protected BaseHandler mHandler;
     protected Context mContext;
     protected static String TAG;
+    //访问读写权限
+    protected static final int WRITE_EXTERNAL_STORAGE = 10001;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void initData();
     public abstract void setViewListener();
 
-    private class BaseHandler extends Handler{
+    protected class BaseHandler extends Handler{
         @Override
         public void handleMessage(Message msg) {
             handlerMessage(msg);
@@ -85,17 +87,36 @@ public abstract class BaseFragment extends Fragment {
                 }
 
             } else {
-                doNextPermission();
+                doNextPermission(requestCode);
             }
         } else {
-            doNextPermission();
+            doNextPermission(requestCode);
         }
     }
 
-    protected void doNextPermission(){}
+    //授予权限，或者已经取得权限都会走这个方法
+    protected void doNextPermission(int requestCode){}
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (verifyPermissions(grantResults)){
+            doNextPermission(requestCode);
+        } else {
+
+        }
+    }
+
+    //验证是否授予权限
+    public boolean verifyPermissions(int[] grantResults) {
+        if (grantResults.length < 1) {
+            return false;
+        }
+
+        for (int result : grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 }

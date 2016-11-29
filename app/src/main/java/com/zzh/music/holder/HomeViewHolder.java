@@ -1,10 +1,10 @@
 package com.zzh.music.holder;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.zzh.music.R;
 
 /**
@@ -16,7 +16,7 @@ import com.zzh.music.R;
  * @Author: zzh
  * @Description:
  */
-public class HomeViewHolder extends RecyclerView.ViewHolder {
+public class HomeViewHolder extends LRecyclerView.ViewHolder {
 
     public TextView musicTitle; //名称
     public TextView musicMsg;//简介

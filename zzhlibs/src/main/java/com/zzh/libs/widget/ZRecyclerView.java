@@ -2,9 +2,10 @@ package com.zzh.libs.widget;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
 
 /**
  * Created by ZZH on 16/6/30.
@@ -15,7 +16,7 @@ import android.view.MotionEvent;
  * @Author: zzh
  * @Description: 自定义的RecyclerView, 主要用于下拉刷新,和加载更多; 添加了一个监听上滑还是下滑的事件
  */
-public class ZRecyclerView extends RecyclerView{
+public class ZRecyclerView extends LRecyclerView {
     private static final String TAG = "HRecyclerView";
     private float pressY = 0;
     private OnItemScrollListener mOnItemScrollListener;
@@ -65,6 +66,8 @@ public class ZRecyclerView extends RecyclerView{
     public void setOnScrollChangeListener(OnScrollChangeListener l) {
         super.setOnScrollChangeListener(l);
     }
+
+
 
     public interface OnItemScrollListener{
         void scrollUp(); //上滑

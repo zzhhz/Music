@@ -1,7 +1,8 @@
 package com.zzh.music.holder;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
 
 /**
  * Created by ZZH on 16/6/22.
@@ -12,7 +13,7 @@ import android.view.View;
  * @Author: zzh
  * @Description: 推荐页的holder
  */
-public class RecommendViewHolder extends RecyclerView.ViewHolder {
+public class RecommendViewHolder extends LRecyclerView.ViewHolder {
 
     public RecommendViewHolder(View itemView) {
         super(itemView);

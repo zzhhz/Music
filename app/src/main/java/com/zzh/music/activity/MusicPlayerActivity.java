@@ -7,14 +7,16 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.zzh.music.R;
 import com.zzh.music.base.BaseActivity;
 import com.zzh.music.model.Music;
 import com.zzh.music.service.MusicService;
+import com.zzh.music.widget.CDView;
 
 /**
  * Created by ZZH on 16/9/28
@@ -25,12 +27,12 @@ import com.zzh.music.service.MusicService;
  * @Author: zzh
  * @Description: 音乐详情的界面,单独拿出一个activity,用来展示播放音乐播放界面。
  */
-public class MusicPlayerActivity extends BaseActivity {
+public class MusicPlayerActivity extends BaseActivity implements Toolbar.OnMenuItemClickListener{
     public static final String DATA_MUSIC_PLAYER = "data";
     private Music mMusic;
-    private TextView mTitleText;//标题
-    private Toolbar mToolbar;
     private MusicService mMusicService;//播放音乐服务的实例
+    private ViewPager mViewPager;
+    private CDView mCDView;
 
 
     ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -55,11 +57,7 @@ public class MusicPlayerActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mTitleText = (TextView) mToolbar.findViewById(R.id.tv_title);
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
-
+        toolbars("播放详情");
         //
     }
 
@@ -91,10 +89,6 @@ public class MusicPlayerActivity extends BaseActivity {
 
         switch (v.getId()){
             case R.id.btn_last_songs:
-                loge(mToolbar.getPaddingLeft()+"");
-                loge(mToolbar.getPaddingTop()+"");
-                loge(mToolbar.getPaddingRight()+"");
-                loge(mToolbar.getPaddingBottom()+"");
                 break;
             case R.id.btn_next_songs:
                 break;
@@ -115,5 +109,10 @@ public class MusicPlayerActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        return false;
     }
 }

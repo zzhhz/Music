@@ -1,14 +1,20 @@
 package com.zzh.music.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
+import com.github.jdsjlzx.interfaces.OnRefreshListener;
+import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
+import com.github.jdsjlzx.recyclerview.ProgressStyle;
+import com.github.jdsjlzx.util.RecyclerViewStateUtils;
+import com.github.jdsjlzx.view.LoadingFooter;
 import com.zzh.libs.widget.ZRecyclerView;
 import com.zzh.music.R;
 import com.zzh.music.adapter.HomeAdapter;
@@ -30,7 +36,11 @@ import java.util.List;
 public class HomeFragment extends BaseFragment {
     private ZRecyclerView mRecommend;
     private HomeAdapter mAdapter;
+    private LRecyclerViewAdapter zAdapter;
     private StaggeredGridLayoutManager mManager;
+    private static final  int REFRESH_COMPLETE = 1000;
+    private int page = 0;
+    private boolean isLoadComplete = false;//是否加载完成
 
     public HomeFragment() {
     }
@@ -52,44 +62,79 @@ public class HomeFragment extends BaseFragment {
         mRecommend = (ZRecyclerView) fragment.findViewById(R.id.recyclerView_home);
         mManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mAdapter = new HomeAdapter(mContext);
+        zAdapter = new LRecyclerViewAdapter(mAdapter);
+        mRecommend.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecommend.setLayoutManager(mManager);
-        mRecommend.setAdapter(mAdapter);
+        mRecommend.setAdapter(zAdapter);
     }
 
     @Override
     protected void initData() {
         //请求权限
-        super.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 10001);
+        super.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE);
     }
 
     @Override
-    protected void doNextPermission() {
-        List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList(0);
+    protected void doNextPermission(int requestCode) {
+        List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList(page);
         mAdapter.clear();
         mAdapter.addAll(musicList);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    protected void checkPermission(String permission, int requestCode) {
-        super.checkPermission(permission, requestCode);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-
-        }
+        zAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void setViewListener() {
+        mRecommend.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                if (isLoadComplete){
+                    return;
+                }
+                page++;
+                List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList(page);
+                if (musicList != null&& musicList.size() > 0){
+                    isLoadComplete = false;
+                    RecyclerViewStateUtils.setFooterViewState((Activity) mContext, mRecommend, 10, LoadingFooter.State.Loading, null);
+                    mAdapter.addAll(musicList);
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    isLoadComplete = true;
+                    page --;
+                    RecyclerViewStateUtils.setFooterViewState(mRecommend, LoadingFooter.State.Normal);
+                }
+            }
+        });
 
+        mRecommend.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        page = 0;
+                        List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList(page);
+                        Message msg = Message.obtain();
+                        msg.what = REFRESH_COMPLETE;
+                        msg.obj = musicList;
+                        mHandler.sendMessage(msg);
+                    }
+                }).start();
+            }
+        });
     }
 
     @Override
     protected void handlerMessage(Message msg) {
+        switch (msg.what){
+            case REFRESH_COMPLETE:
+                page = 0;
+                mAdapter.clear();
+                mRecommend.refreshComplete();
+                mAdapter.addAll((List<Music>) msg.obj);
+                isLoadComplete = false;
+                zAdapter.notifyDataSetChanged();
+                break;
+        }
 
     }
 

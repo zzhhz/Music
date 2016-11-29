@@ -11,6 +11,7 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore.Audio.Media;
 import android.util.Log;
 
+import com.zzh.music.MusicConstants;
 import com.zzh.music.R;
 import com.zzh.music.model.Music;
 
@@ -86,15 +87,16 @@ public class MusicLoader {
      */
     public List<Music> getMusicList(int pageNum, int pageSize){
 
-        if (pageNum <1){
-            pageNum = 1;
-        }
         if (pageSize < 0)
         {
-            pageSize = 10;
+            pageSize = MusicConstants.PAGE_SIZE;
         }
-
-        int count = pageNum * pageSize - 1;
+        int count = 0;
+        if (pageNum < 1){
+            count = 0;
+        } else {
+            count = pageNum * pageSize - 1;
+        }
 
         Cursor cursor = contentResolver.query(contentUri, projection, where, null, sortOrder+" ASC LIMIT "+count+" , "+pageSize);
         //清空集合
@@ -113,7 +115,6 @@ public class MusicLoader {
             int urlCol = cursor.getColumnIndex(Media.DATA);
             int auId = cursor.getColumnIndex(Media.ALBUM_ID);
             int auTitle = cursor.getColumnIndex(Media.TITLE);
-            Log.d(TAG, "MusicLoader: ");
             while (cursor.moveToNext()){
                 String title = cursor.getString(displayNameCol);
                 String album = cursor.getString(albumCol);
@@ -136,19 +137,6 @@ public class MusicLoader {
                 music.setMusicName(title);
                 music.setMusicAlbumId(albumId);
                 music.setMusicTitle(albumTitle);
-
-                Bitmap bitmap = getMusicArt(mContext, id, albumId, true);
-                if (bitmap != null){
-                    Log.d(TAG, "getMusicList: "+bitmap.getHeight()+",    "+bitmap.getWidth()+",   "+bitmap.toString());
-
-                    float scale = (float) imageWidth / (float) bitmap.getWidth();
-                    music.setHeight((int) (scale * bitmap.getHeight()));
-                    music.setWidth(imageWidth);
-                    Log.e(TAG, "scale: "+scale);
-                    //music.setBitmapAlbum(bitmap);
-                }
-
-
                 musicList.add(music);
             }
         }

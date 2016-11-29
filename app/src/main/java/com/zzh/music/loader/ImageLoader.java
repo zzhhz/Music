@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.zzh.music.R;
+import com.zzh.music.utils.DensityUtils;
 
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
@@ -43,6 +44,7 @@ public class ImageLoader {
 
     private Semaphore mSemaphoreThreadPool;
     private static Context mContext;
+    private static int imageWidth;
 
 
     public static ImageLoader getInstance(Context ctx) {
@@ -52,6 +54,7 @@ public class ImageLoader {
                     mInstance = new ImageLoader(DEFAULT_THREAD_COUNT, Type.LIFO);
                     mCachedBit = getDefaultArtwork(ctx);
                     mContext = ctx;
+                    imageWidth = (DensityUtils.getDisplayWidth(ctx) - 20) / 2;
                 }
             }
         }
@@ -205,6 +208,13 @@ public class ImageLoader {
                     String path = holder.path;
                     ImageView imageView = holder.imageView;
                     if (imageView.getTag().toString().equals(path)) {
+                        if (bm == null)
+                            return;
+
+                        float scale = (float) imageWidth / (float) bm.getWidth();
+                        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+                        params.height = (int) (scale * bm.getHeight());
+                        imageView.setLayoutParams(params);
                         imageView.setImageBitmap(bm);
                     }
                 }
