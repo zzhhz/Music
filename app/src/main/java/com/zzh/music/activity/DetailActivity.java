@@ -63,7 +63,8 @@ public class DetailActivity extends BaseMusicActivity {
                 }
                 break;
         }
-        fragmentTransaction.commitNowAllowingStateLoss();
+//        fragmentTransaction.commitNowAllowingStateLoss();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override

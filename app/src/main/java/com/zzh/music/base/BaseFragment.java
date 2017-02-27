@@ -20,7 +20,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * Created by zzh on 2016/3/14.
+ * Created by ZZH on 16/12/21
+ *
+ * @Date: 16/12/21 14:16
+ * @Email: zzh_hz@126.com
+ * @QQ: 1299234582
+ * @Author: zzh
+ * @Description: 支持Palette
  */
 public abstract class BaseFragment extends Fragment {
     protected BaseHandler mHandler;
@@ -118,5 +124,10 @@ public abstract class BaseFragment extends Fragment {
             }
         }
         return true;
+    }
+
+    public int getBackgroundBitmapPosition(){
+
+        return 0;
     }
 }
