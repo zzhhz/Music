@@ -3,12 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="5dp"
-    app:cardElevation="3dp"
-    app:cardPreventCornerOverlap="false"
+    app:cardElevation="5dp"
+    app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="false"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    android:background="?attr/selectableItemBackgroundBorderless">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:src="@mipmap/ic_launcher"/>
+            android:scaleType="fitXY"
+            android:src="@mipmap/ceshi"/>
 
         <TextView
             android:id="@+id/tv_music_title"

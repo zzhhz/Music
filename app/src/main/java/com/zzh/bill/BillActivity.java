@@ -1,11 +1,11 @@
 package com.zzh.bill;
 
-import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
 
 import com.zzh.music.R;
-import com.zzh.music.base.BaseActivity;
+import com.zzh.music.base.BaseMusicActivity;
+
 /**
  * Created by ZZH on 16/6/22
  *
@@ -15,13 +15,11 @@ import com.zzh.music.base.BaseActivity;
  * @Author: zzh
  * @Description: 账单
  */
-public class BillActivity extends BaseActivity {
+public class BillActivity extends BaseMusicActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bill);
-        init();
+    protected int setLayoutId() {
+        return R.layout.activity_bill;
     }
 
     @Override

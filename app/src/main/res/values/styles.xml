@@ -1,19 +1,6 @@
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorGlobe</item>
+    <style name="AppTheme" parent="Theme.Translucent.System.Bar">
+        <item name="colorAccent">@color/colorGlobe</item>
         <item name="colorPrimaryDark">@color/colorGlobe</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <!--activity 的启动效果-->
-        <item name="android:activityOpenEnterAnimation">@anim/slide_right_in</item>
-        <item name="android:activityOpenExitAnimation">@anim/slide_left_out</item>
-        <item name="android:activityCloseEnterAnimation">@anim/slide_left_in</item>
-        <item name="android:activityCloseExitAnimation">@anim/slide_right_out</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-    <style name="AppTheme" parent="BaseAppTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
     </style>
 </resources>

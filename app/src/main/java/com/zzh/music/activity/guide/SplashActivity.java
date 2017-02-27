@@ -5,15 +5,15 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.zzh.music.MainActivity;
 import com.zzh.music.R;
-import com.zzh.music.base.BaseActivity;
+import com.zzh.zlibs.base.BaseNoSwipeBackActivity;
 
 /**
  * Created by ZZH on 16/11/22
@@ -24,14 +24,12 @@ import com.zzh.music.base.BaseActivity;
  * @Author: zzh
  * @Description: 程序的闪屏页
  */
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseNoSwipeBackActivity {
     private ImageView mSplash;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        init();
+    protected int setLayoutId() {
+        return R.layout.activity_splash;
     }
 
     @Override
@@ -90,5 +88,13 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

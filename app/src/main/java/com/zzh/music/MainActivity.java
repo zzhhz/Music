@@ -2,8 +2,8 @@ package com.zzh.music;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.design.widget.NavigationView;
@@ -11,15 +11,17 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 
 import com.zzh.music.activity.ContactActivity;
 import com.zzh.music.adapter.MainPagerAdapter;
-import com.zzh.music.base.BaseNoSwipeBackActivity;
+import com.zzh.music.base.BaseMusicNoSwipeActivity;
 import com.zzh.music.fragment.AlbumFragment;
 import com.zzh.music.fragment.HomeFragment;
 import com.zzh.music.fragment.RecommendFragment;
@@ -28,8 +30,7 @@ import com.zzh.music.widget.ZZHDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseNoSwipeBackActivity {
-    private Toolbar mToolbar;
+public class MainActivity extends BaseMusicNoSwipeActivity implements ViewPager.OnPageChangeListener{
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private MainPagerAdapter mAdapter;
@@ -46,25 +47,25 @@ public class MainActivity extends BaseNoSwipeBackActivity {
     private RelativeLayout mHeaderViewLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        init();
+    protected int setLayoutId() {
+        return R.layout.activity_main;
     }
 
     @Override
     protected void initView() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mNavigationView = (NavigationView) findViewById(R.id.menuView);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         //去掉Toolbar的标题
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
+        toolbars(R.id.toolbar, R.mipmap.ic_launcher, "", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mAdapter = new MainPagerAdapter(getSupportFragmentManager());
-        //初始化Toolbar
-        mToolbar.setNavigationIcon(R.mipmap.ic_launcher);
         //抽屉
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout,R.string.app_name, R.string.app_name);
         mDrawerLayout.addDrawerListener(toggle);
@@ -87,7 +88,6 @@ public class MainActivity extends BaseNoSwipeBackActivity {
 
     @Override
     protected void initSetListener() {
-
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -122,6 +122,21 @@ public class MainActivity extends BaseNoSwipeBackActivity {
                 return false;
             }
         });
+        mViewPager.addOnPageChangeListener(this);
+        /*List<Palette.Swatch> list = new ArrayList<>();
+        Palette.Swatch swatch1 = new Palette.Swatch(Color.BLUE, -1);
+        Palette.Swatch swatch2 = new Palette.Swatch(Color.RED, -1);
+        Palette.Swatch swatch3 = new Palette.Swatch(Color.BLACK, -1);
+        list.add(swatch1);
+        list.add(swatch2);
+        list.add(swatch3);
+        new Palette.Builder(list).generate(new Palette.PaletteAsyncListener() {
+            @Override
+            public void onGenerated(Palette palette) {
+                Palette.Swatch darkMutedSwatch = palette.getDarkMutedSwatch();
+
+            }
+        });*/
     }
 
     @Override
@@ -164,6 +179,21 @@ public class MainActivity extends BaseNoSwipeBackActivity {
 
         }
         return infos;
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 
     class ContactInfo{

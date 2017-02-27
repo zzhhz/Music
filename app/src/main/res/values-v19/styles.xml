@@ -1,9 +1,8 @@
 <resources>
 
-    <style name="AppTheme" parent="BaseAppTheme" >
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">false</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme" parent="Theme.Translucent.System.Bar" >
+        <item name="colorAccent">@color/colorGlobe</item>
+        <item name="colorPrimaryDark">@color/colorGlobe</item>
+        <item name="colorPrimary">@color/colorGlobe</item>
     </style>
 </resources>

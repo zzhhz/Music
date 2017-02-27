@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.zzh.music.R;
-import com.zzh.music.base.BaseActivity;
+import com.zzh.music.base.BaseMusicActivity;
 import com.zzh.music.model.Music;
 import com.zzh.music.service.MusicService;
 import com.zzh.music.widget.CDView;
@@ -27,7 +27,7 @@ import com.zzh.music.widget.CDView;
  * @Author: zzh
  * @Description: 音乐详情的界面,单独拿出一个activity,用来展示播放音乐播放界面。
  */
-public class MusicPlayerActivity extends BaseActivity implements Toolbar.OnMenuItemClickListener{
+public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.OnMenuItemClickListener{
     public static final String DATA_MUSIC_PLAYER = "data";
     private Music mMusic;
     private MusicService mMusicService;//播放音乐服务的实例
@@ -51,13 +51,16 @@ public class MusicPlayerActivity extends BaseActivity implements Toolbar.OnMenuI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_music_player);
-        init();
+    }
+
+    @Override
+    protected int setLayoutId() {
+        return R.layout.activity_music_player;
     }
 
     @Override
     protected void initView() {
-        toolbars("播放详情");
+        //toolbars("播放详情");
         //
     }
 
@@ -65,7 +68,6 @@ public class MusicPlayerActivity extends BaseActivity implements Toolbar.OnMenuI
     protected void initData() {
         Intent intentMusic = getIntent();
         mMusic = (Music) intentMusic.getSerializableExtra(DATA_MUSIC_PLAYER);
-
         //启动音乐播放服务
         Intent intent = new Intent(mContext, MusicService.class);
         intent.putExtra("data", mMusic);

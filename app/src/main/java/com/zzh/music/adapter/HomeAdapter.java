@@ -68,19 +68,7 @@ public class HomeAdapter extends LRecyclerView.Adapter<HomeViewHolder> {
         final Music item = dataList.get(position);
         holder.musicMsg.setText(item.getMusicDuration()+"");
         holder.musicTitle.setText(item.getMusicTitle());
-        /*LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(item.getWidth(), item.getHeight());
-        holder.musicAlbum.setLayoutParams(params);*/
         ImageLoader.getInstance(mContext).loadImageUri(item.getId(),item.getMusicAlbumId(), holder.musicAlbum);
-        /*Uri uri;
-        if (item.getMusicAlbumId() <= 0){
-            uri = ContentUris.withAppendedId(sArtworkUri, item.getId());
-        } else {
-            uri = ContentUris.withAppendedId(sArtworkUri, item.getMusicAlbumId());
-        }*/
-
-        /*Glide.with(mContext).load(uri).centerCrop().
-                error(R.mipmap.ic_launcher).diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.musicAlbum);*/
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

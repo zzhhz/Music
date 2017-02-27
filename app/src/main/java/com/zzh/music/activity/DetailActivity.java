@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import com.zzh.music.R;
-import com.zzh.music.base.BaseActivity;
+import com.zzh.music.base.BaseMusicActivity;
 import com.zzh.music.fragment.AlbumDetailFragment;
 
 /**
@@ -20,7 +20,7 @@ import com.zzh.music.fragment.AlbumDetailFragment;
  * @Author: zzh
  * @Description: 显示详情的容器, 里面由fragment填充
  */
-public class DetailActivity extends BaseActivity {
+public class DetailActivity extends BaseMusicActivity {
     /***
      * fragment类型
      ***/
@@ -35,8 +35,11 @@ public class DetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
-        init();
+    }
+
+    @Override
+    protected int setLayoutId() {
+        return R.layout.activity_detail;
     }
 
     @Override

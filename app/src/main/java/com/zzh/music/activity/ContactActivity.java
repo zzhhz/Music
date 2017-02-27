@@ -18,7 +18,7 @@ import com.zzh.libs.widget.AlertView;
 import com.zzh.libs.widget.ZRecyclerView;
 import com.zzh.music.R;
 import com.zzh.music.adapter.ContactsAdapter;
-import com.zzh.music.base.BaseActivity;
+import com.zzh.music.base.BaseMusicActivity;
 import com.zzh.music.model.Contacts;
 import com.zzh.music.utils.ContactsLoader;
 
@@ -34,7 +34,7 @@ import java.util.List;
  * @Description: 读取手机通讯录信息
  */
 
-public class ContactActivity extends BaseActivity {
+public class ContactActivity extends BaseMusicActivity {
     private static final int CODE_READ_CONTACT = 10000;
     private AlertView mAlertView;
     //private ObservableListView mListView;
@@ -48,8 +48,11 @@ public class ContactActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact);
-        init();
+    }
+
+    @Override
+    protected int setLayoutId() {
+        return R.layout.activity_contact;
     }
 
     @Override

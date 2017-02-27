@@ -1,16 +1,15 @@
 <resources>
-
-    <style name="AppTheme" parent="BaseAppTheme" >
+    <style name="AppTheme" parent="Theme.Translucent.System.Bar" >
         <!--这里暂时用不上这三个属性-->
         <!--<item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@color/colorGlobe</item>-->
         <!--没有actionbar-->
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/Activity</item>
         <!--激活转场元素-->
         <item name="android:windowContentTransitions">true</item>
-
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorGlobe</item>
+        <item name="colorPrimary">@color/colorGlobe</item>
     </style>
-
 </resources>

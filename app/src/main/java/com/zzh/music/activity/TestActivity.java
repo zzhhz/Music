@@ -6,15 +6,18 @@ import android.os.Message;
 import android.view.View;
 
 import com.zzh.music.R;
-import com.zzh.music.base.BaseActivity;
+import com.zzh.music.base.BaseMusicActivity;
 
-public class TestActivity extends BaseActivity {
+public class TestActivity extends BaseMusicActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
-        init();
+    }
+
+    @Override
+    protected int setLayoutId() {
+        return R.layout.activity_test;
     }
 
     @Override
@@ -47,10 +50,5 @@ public class TestActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
 
-    }
-
-    @Override
-    protected void notifyPermission(int code) {
-        loge(code+"");
     }
 }
