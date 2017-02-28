@@ -17,6 +17,7 @@ import com.zzh.music.model.Music;
 import com.zzh.music.service.MusicService;
 import com.zzh.music.widget.CDView;
 import com.zzh.music.widget.LrcView;
+import com.zzh.zlibs.swipe.SwipeBackLayout;
 
 /**
  * Created by ZZH on 16/9/28
@@ -59,7 +60,13 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         //toolbars("播放详情");
         Intent intentMusic = getIntent();
         mMusic = (Music) intentMusic.getSerializableExtra(DATA_MUSIC_PLAYER);
-        toolbars(R.id.toolbars,  R.mipmap.icon_back, mMusic.getMusicName(),null);
+        toolbars(R.id.toolbars, R.mipmap.icon_back, mMusic.getMusicName(), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SwipeBackLayout layout = getSwipeBackLayout();
+                layout.scrollToFinishActivity();
+            }
+        });
 
     }
 
