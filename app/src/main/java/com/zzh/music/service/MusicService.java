@@ -9,6 +9,10 @@ import android.os.IBinder;
 import com.zzh.music.activity.MusicPlayerActivity;
 import com.zzh.music.model.Music;
 
+import java.io.IOException;
+
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+
 /**
  * Created by ZZH on 16/9/28
  *
@@ -21,24 +25,36 @@ import com.zzh.music.model.Music;
 public class MusicService extends Service {
 
     private IBinder mIBinder = null;
-    private MediaPlayer mMediaPlayer = null;
+//    private MediaPlayer mMediaPlayer = null;
     private Music mMusic;
+    private IjkMediaPlayer mMediaPlayer;
+
+    static {
+    }
 
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mMediaPlayer = new MediaPlayer();
+        mMediaPlayer = new IjkMediaPlayer();
         mIBinder = new MusicBinder(this);
+
     }
 
     public MusicService() {
+
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         //播放音乐
         mMusic = (Music) intent.getSerializableExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER);
+        mMusic.getMusicUrl();
+        try {
+            mMediaPlayer.setDataSource(mMusic.getMusicUrl());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return mIBinder;
     }
 
@@ -64,8 +80,41 @@ public class MusicService extends Service {
     }
 
     //音乐播放的位置
-    public int getMusicPositionPlayer(){
+    public long getMusicPositionPlayer(){
+        return mMediaPlayer.getCurrentPosition();
+    }
 
-        return 0;
+    public boolean isPlaying()
+    {
+        return mMediaPlayer.isPlaying();
+    }
+
+    /**
+     * 开始播放
+     */
+    public void startMusicPlayer()
+    {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.reset();
+            mMediaPlayer.start();
+        }
+    }
+    /**
+     * 停止
+     */
+    public void stopMusicPlayer(){
+
+        if (mMediaPlayer != null){
+            mMediaPlayer.pause();
+        }
+    }
+
+    /**
+     * 暂停
+     */
+    public void pauseMusicPlayer(){
+        if (mMediaPlayer != null){
+            mMediaPlayer.stop();
+        }
     }
 }

@@ -25,7 +25,7 @@ import com.zzh.music.R;
  * @Description: 音乐播放的时候类似CD的转盘
  */
 
-public class CDView extends View{
+public class CDView extends View {
 
     private static final int MSG_RUN = 0x00000100;
     private static final int TIME_UPDATE = 50;

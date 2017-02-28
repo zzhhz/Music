@@ -5,7 +5,6 @@
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@color/colorGlobe</item>-->
         <!--没有actionbar-->
-        <item name="android:windowAnimationStyle">@style/Activity</item>
         <!--激活转场元素-->
         <item name="android:windowContentTransitions">true</item>
         <item name="colorAccent">@color/colorAccent</item>

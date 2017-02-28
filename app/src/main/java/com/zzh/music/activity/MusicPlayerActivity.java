@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -17,6 +18,7 @@ import com.zzh.music.base.BaseMusicActivity;
 import com.zzh.music.model.Music;
 import com.zzh.music.service.MusicService;
 import com.zzh.music.widget.CDView;
+import com.zzh.music.widget.LrcView;
 
 /**
  * Created by ZZH on 16/9/28
@@ -32,7 +34,8 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     private Music mMusic;
     private MusicService mMusicService;//播放音乐服务的实例
     private ViewPager mViewPager;
-    private CDView mCDView;
+    private CDView mCDView;//转盘文件
+    private LrcView mLrcView;// 歌词显示
 
 
     ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -49,11 +52,6 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     protected int setLayoutId() {
         return R.layout.activity_music_player;
     }
@@ -61,17 +59,18 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     @Override
     protected void initView() {
         //toolbars("播放详情");
-        //
+        Intent intentMusic = getIntent();
+        mMusic = (Music) intentMusic.getSerializableExtra(DATA_MUSIC_PLAYER);
+        toolbars(R.id.toolbars,  R.mipmap.icon_back, mMusic.getMusicName(),null);
+
     }
 
     @Override
     protected void initData() {
-        Intent intentMusic = getIntent();
-        mMusic = (Music) intentMusic.getSerializableExtra(DATA_MUSIC_PLAYER);
         //启动音乐播放服务
         Intent intent = new Intent(mContext, MusicService.class);
         intent.putExtra("data", mMusic);
-        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        //bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -79,6 +78,12 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         findViewById(R.id.btn_last_songs).setOnClickListener(this);
         findViewById(R.id.btn_next_songs).setOnClickListener(this);
         findViewById(R.id.btn_player_stop).setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //mToolbar.setTitle(mMusic.getMusicTitle());
     }
 
     @Override
@@ -105,7 +110,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     protected void onPause() {
         super.onPause();
         //解绑服务
-        unbindService(mServiceConnection);
+        //unbindService(mServiceConnection);
     }
 
     @Override

@@ -130,7 +130,7 @@ public class HomeFragment extends BaseFragment {
             case REFRESH_COMPLETE:
                 page = 0;
                 mAdapter.clear();
-                mRecommend.refreshComplete();
+                mRecommend.refreshComplete(page);
                 int start = mAdapter.getItemCount();
                 mAdapter.addAll((List<Music>) msg.obj);
                 isLoadComplete = false;

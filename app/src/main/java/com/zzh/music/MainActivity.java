@@ -64,13 +64,12 @@ public class MainActivity extends BaseMusicNoSwipeActivity implements ViewPager.
         mNavigationView = (NavigationView) findViewById(R.id.menuView);
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         //去掉Toolbar的标题
-        toolbars(R.id.toolbar, -1, "", new View.OnClickListener() {
+        toolbars(R.id.toolbar, -1, "音乐", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
-
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mAdapter = new MainPagerAdapter(getSupportFragmentManager());
