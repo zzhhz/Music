@@ -1,23 +1,27 @@
 package com.zzh.music;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Message;
 import android.provider.ContactsContract;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 
 import com.zzh.music.activity.ContactActivity;
 import com.zzh.music.adapter.MainPagerAdapter;
@@ -25,6 +29,7 @@ import com.zzh.music.base.BaseMusicNoSwipeActivity;
 import com.zzh.music.fragment.AlbumFragment;
 import com.zzh.music.fragment.HomeFragment;
 import com.zzh.music.fragment.RecommendFragment;
+import com.zzh.music.utils.ColorUtils;
 import com.zzh.music.widget.ZZHDialog;
 
 import java.util.ArrayList;
@@ -45,6 +50,8 @@ public class MainActivity extends BaseMusicNoSwipeActivity implements ViewPager.
     private HomeFragment mHomeFragment;
     //侧滑菜单的头布局
     private RelativeLayout mHeaderViewLayout;
+    private AppBarLayout appBarLayout;
+    private int mAppBarLayoutBgColor = -1;
 
     @Override
     protected int setLayoutId() {
@@ -55,8 +62,9 @@ public class MainActivity extends BaseMusicNoSwipeActivity implements ViewPager.
     protected void initView() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mNavigationView = (NavigationView) findViewById(R.id.menuView);
+        appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         //去掉Toolbar的标题
-        toolbars(R.id.toolbar, R.mipmap.ic_launcher, "", new View.OnClickListener() {
+        toolbars(R.id.toolbar, -1, "", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -123,20 +131,56 @@ public class MainActivity extends BaseMusicNoSwipeActivity implements ViewPager.
             }
         });
         mViewPager.addOnPageChangeListener(this);
-        /*List<Palette.Swatch> list = new ArrayList<>();
-        Palette.Swatch swatch1 = new Palette.Swatch(Color.BLUE, -1);
-        Palette.Swatch swatch2 = new Palette.Swatch(Color.RED, -1);
-        Palette.Swatch swatch3 = new Palette.Swatch(Color.BLACK, -1);
-        list.add(swatch1);
-        list.add(swatch2);
-        list.add(swatch3);
-        new Palette.Builder(list).generate(new Palette.PaletteAsyncListener() {
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
-            public void onGenerated(Palette palette) {
-                Palette.Swatch darkMutedSwatch = palette.getDarkMutedSwatch();
+            public void onTabSelected(TabLayout.Tab tab) {
+                float x = 0;
+                float y = 0;
+                appBarLayout.setBackgroundColor(mAppBarLayoutBgColor);
+                final int width = mTabLayout.getWidth();
+                final int height = mTabLayout.getHeight();
+                final double radio = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
+                Animator circularReveal = ViewAnimationUtils.createCircularReveal(appBarLayout,
+                        (int) x,
+                        (int) y, 0, (float) radio);
+                circularReveal.setInterpolator(new AccelerateInterpolator());
+                circularReveal.setDuration(375);
+                circularReveal.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        mAppBarLayoutBgColor = Color.parseColor(ColorUtils.random());
+                        appBarLayout.setBackgroundColor(mAppBarLayoutBgColor);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        appBarLayout.setDrawingCacheBackgroundColor(mAppBarLayoutBgColor);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                circularReveal.start();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
             }
-        });*/
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override

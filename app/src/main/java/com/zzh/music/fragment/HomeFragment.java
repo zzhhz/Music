@@ -79,7 +79,7 @@ public class HomeFragment extends BaseFragment {
         List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList(page);
         mAdapter.clear();
         mAdapter.addAll(musicList);
-        zAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -95,8 +95,9 @@ public class HomeFragment extends BaseFragment {
                 if (musicList != null&& musicList.size() > 0){
                     isLoadComplete = false;
                     RecyclerViewStateUtils.setFooterViewState((Activity) mContext, mRecommend, 10, LoadingFooter.State.Loading, null);
+                    int start = mAdapter.getItemCount();
                     mAdapter.addAll(musicList);
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemRangeChanged(start, mAdapter.getItemCount());
                 } else {
                     isLoadComplete = true;
                     page --;
@@ -130,9 +131,11 @@ public class HomeFragment extends BaseFragment {
                 page = 0;
                 mAdapter.clear();
                 mRecommend.refreshComplete();
+                int start = mAdapter.getItemCount();
                 mAdapter.addAll((List<Music>) msg.obj);
                 isLoadComplete = false;
-                zAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(start, mAdapter.getItemCount());
                 break;
         }
 

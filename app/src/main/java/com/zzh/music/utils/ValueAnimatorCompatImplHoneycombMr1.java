@@ -42,7 +42,7 @@ public class ValueAnimatorCompatImplHoneycombMr1 extends ValueAnimatorCompat.Imp
     }
 
     @Override
-    public void addListener(final com.didikee.demos.ui.tab.ValueAnimatorCompat.Impl.AnimatorListenerProxy listener) {
+    public void addListener(final ValueAnimatorCompat.Impl.AnimatorListenerProxy listener) {
         mValueAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animator) {
