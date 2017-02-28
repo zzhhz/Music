@@ -1,7 +1,6 @@
 package com.zzh.music.fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -13,8 +12,6 @@ import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.github.jdsjlzx.recyclerview.ProgressStyle;
-import com.github.jdsjlzx.util.RecyclerViewStateUtils;
-import com.github.jdsjlzx.view.LoadingFooter;
 import com.zzh.libs.widget.ZRecyclerView;
 import com.zzh.music.R;
 import com.zzh.music.adapter.HomeAdapter;
@@ -34,11 +31,12 @@ import java.util.List;
  * @Description: 首页, 瀑布流式的展示效果
  */
 public class HomeFragment extends BaseFragment {
+    private static final int NO_MORE = 1001;
     private ZRecyclerView mRecommend;
     private HomeAdapter mAdapter;
     private LRecyclerViewAdapter zAdapter;
     private StaggeredGridLayoutManager mManager;
-    private static final  int REFRESH_COMPLETE = 1000;
+    private static final int REFRESH_COMPLETE = 1000;
     private int page = 0;
     private boolean isLoadComplete = false;//是否加载完成
 
@@ -87,58 +85,72 @@ public class HomeFragment extends BaseFragment {
         mRecommend.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                if (isLoadComplete){
+                if (isLoadComplete) {
                     return;
                 }
                 page++;
-                List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList(page);
-                if (musicList != null&& musicList.size() > 0){
+                reloadMusic(page);
+                /*List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList(page);
+                if (musicList != null && musicList.size() > 0) {
                     isLoadComplete = false;
-                    RecyclerViewStateUtils.setFooterViewState((Activity) mContext, mRecommend, 10, LoadingFooter.State.Loading, null);
+                    //RecyclerViewStateUtils.setFooterViewState((Activity) mContext, mRecommend, 10, LoadingFooter.State.Loading, null);
                     int start = mAdapter.getItemCount();
                     mAdapter.addAll(musicList);
                     mAdapter.notifyItemRangeChanged(start, mAdapter.getItemCount());
                 } else {
                     isLoadComplete = true;
-                    page --;
-                    RecyclerViewStateUtils.setFooterViewState(mRecommend, LoadingFooter.State.Normal);
-                }
+                    page--;
+                    //RecyclerViewStateUtils.setFooterViewState(mRecommend, LoadingFooter.State.Normal);
+                }*/
             }
         });
 
         mRecommend.setOnRefreshListener(new OnRefreshListener() {
+
             @Override
             public void onRefresh() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        page = 0;
-                        List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList(page);
-                        Message msg = Message.obtain();
-                        msg.what = REFRESH_COMPLETE;
-                        msg.obj = musicList;
-                        mHandler.sendMessage(msg);
-                    }
-                }).start();
+                page = 0;
+                reloadMusic(page);
             }
         });
     }
 
     @Override
     protected void handlerMessage(Message msg) {
-        switch (msg.what){
+        switch (msg.what) {
             case REFRESH_COMPLETE:
-                page = 0;
-                mAdapter.clear();
+                if (page == 0) {
+                    mAdapter.clear();
+                }
                 mRecommend.refreshComplete(page);
                 int start = mAdapter.getItemCount();
                 mAdapter.addAll((List<Music>) msg.obj);
                 isLoadComplete = false;
-                mAdapter.notifyDataSetChanged();
                 mAdapter.notifyItemRangeChanged(start, mAdapter.getItemCount());
+                break;
+            case NO_MORE:
+                isLoadComplete = true;
                 break;
         }
 
+    }
+
+    private void reloadMusic(final int page) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList(page);
+                Message msg = Message.obtain();
+                msg.what = REFRESH_COMPLETE;
+                msg.obj = musicList;
+                if (musicList == null || musicList.size() == 0){
+                    mHandler.sendEmptyMessage(NO_MORE);
+                } else {
+                    mHandler.sendMessage(msg);
+                }
+            }
+        };
+        new Thread(runnable).start();
     }
 
     @Override
