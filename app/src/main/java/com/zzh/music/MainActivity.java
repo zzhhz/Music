@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -193,35 +194,18 @@ public class MainActivity extends BaseMusicNoSwipeActivity implements ViewPager.
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.item_menu, menu);
+        mToolbar.getMenu().getItem(0).setVisible(true);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public void onWindowFocusChanged(boolean hasFocus) {
 
         if (hasFocus){
             Log.e("", "onGlobalLayout: 4-------------hui zhi wan cheng -------"+mViewPager.getHeight());
         }
-    }
-
-    public List<ContactInfo> getContactsByPage(int pageSize, int currentOffset) {
-
-        List<ContactInfo> infos=new ArrayList<ContactInfo>();
-        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        String[] projection = { ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                ContactsContract.CommonDataKinds.Phone.DATA1, "sort_key"};
-        Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, "sort_key COLLATE LOCALIZED asc limit " + pageSize + " offset " + currentOffset);
-        if (cursor != null) {
-
-            while (cursor.moveToNext()) {
-
-                ContactInfo info=new ContactInfo();
-                String contactName = cursor.getString(0);
-                String phoneNumber = cursor.getString(1);
-                infos.add(info);
-                info=null;
-            }
-            cursor.close();
-
-
-        }
-        return infos;
     }
 
     @Override
@@ -239,7 +223,5 @@ public class MainActivity extends BaseMusicNoSwipeActivity implements ViewPager.
 
     }
 
-    class ContactInfo{
 
-    }
 }

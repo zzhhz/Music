@@ -82,6 +82,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void setViewListener() {
+        mRecommend.setLoadMoreEnabled(true);
         mRecommend.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -90,18 +91,6 @@ public class HomeFragment extends BaseFragment {
                 }
                 page++;
                 reloadMusic(page);
-                /*List<Music> musicList = MusicLoader.getInstance(mContext).getMusicList(page);
-                if (musicList != null && musicList.size() > 0) {
-                    isLoadComplete = false;
-                    //RecyclerViewStateUtils.setFooterViewState((Activity) mContext, mRecommend, 10, LoadingFooter.State.Loading, null);
-                    int start = mAdapter.getItemCount();
-                    mAdapter.addAll(musicList);
-                    mAdapter.notifyItemRangeChanged(start, mAdapter.getItemCount());
-                } else {
-                    isLoadComplete = true;
-                    page--;
-                    //RecyclerViewStateUtils.setFooterViewState(mRecommend, LoadingFooter.State.Normal);
-                }*/
             }
         });
 
@@ -110,6 +99,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 page = 0;
+                mRecommend.setNoMore(false);
                 reloadMusic(page);
             }
         });
@@ -122,14 +112,20 @@ public class HomeFragment extends BaseFragment {
                 if (page == 0) {
                     mAdapter.clear();
                 }
-                mRecommend.refreshComplete(page);
                 int start = mAdapter.getItemCount();
                 mAdapter.addAll((List<Music>) msg.obj);
                 isLoadComplete = false;
-                mAdapter.notifyItemRangeChanged(start, mAdapter.getItemCount());
+                if (page == 0){
+                    mAdapter.notifyDataSetChanged();
+                }else {
+                    mAdapter.notifyItemRangeChanged(start, mAdapter.getItemCount());
+                }
+                mRecommend.refreshComplete(8);
+                mRecommend.setNoMore(isLoadComplete);
                 break;
             case NO_MORE:
                 isLoadComplete = true;
+                mRecommend.setNoMore(isLoadComplete);
                 break;
         }
 
