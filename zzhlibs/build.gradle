@@ -47,5 +47,6 @@ dependencies {
     compile 'tv.danmaku.ijk.media:ijkplayer-arm64:0.7.7.1'
     compile 'tv.danmaku.ijk.media:ijkplayer-x86:0.7.7.1'
     compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.7.7.1'
-
+    compile 'com.jakewharton:butterknife:8.5.1'
+    compile 'com.jakewharton:butterknife-compiler:8.5.1'
 }

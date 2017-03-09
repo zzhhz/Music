@@ -1,10 +1,16 @@
 package com.zzh.music.interfaces;
 
+import com.zzh.music.model.BaseModel;
+import com.zzh.music.model.Music;
+
+import java.util.Map;
+
 import okhttp3.ResponseBody;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.QueryMap;
 import rx.Observable;
 
 /**
@@ -19,12 +25,15 @@ import rx.Observable;
  */
 public interface APIService {
 
-    @POST("MusicService/")
-    Observable<ResponseBody> testApi(@Body String id);
-
     @FormUrlEncoded
     @POST("MusicService/user/login.zzh")
     Observable<ResponseBody> login(@Field("userName") String userName, @Field("passWord") String passWord);
+
+    @GET("v1/restserver/ting")
+    Observable<ResponseBody> testApi(@QueryMap Map<String, String> params);
+    @GET("v1/restserver/ting")
+    Observable<BaseModel<Music>> getRecommendType(@QueryMap Map<String, String> params);
+
 
 
 

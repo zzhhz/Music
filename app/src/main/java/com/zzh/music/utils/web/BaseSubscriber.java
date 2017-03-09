@@ -1,5 +1,9 @@
 package com.zzh.music.utils.web;
 
+import android.app.Activity;
+
+import java.lang.ref.WeakReference;
+
 import rx.Subscriber;
 
 /**
@@ -11,11 +15,13 @@ import rx.Subscriber;
  * @Author: zzh
  * @Description:
  */
-public class BaseSubscriber<T> extends Subscriber<T> {
+public abstract class BaseSubscriber<T> extends Subscriber<T> {
 
-    @Override
-    public void onCompleted() {
+    private final WeakReference<Activity> mReference;
+    private String apiUrl;
 
+    public BaseSubscriber(Activity activity) {
+        mReference = new WeakReference<>(activity);
     }
 
     @Override
@@ -24,7 +30,12 @@ public class BaseSubscriber<T> extends Subscriber<T> {
     }
 
     @Override
-    public void onNext(Object o) {
+    public void onCompleted() {
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 }

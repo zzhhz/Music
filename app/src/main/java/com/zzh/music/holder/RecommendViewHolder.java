@@ -1,8 +1,14 @@
 package com.zzh.music.holder;
 
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
+import com.zzh.music.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by ZZH on 16/6/22.
@@ -15,8 +21,15 @@ import com.github.jdsjlzx.recyclerview.LRecyclerView;
  */
 public class RecommendViewHolder extends LRecyclerView.ViewHolder {
 
+    @BindView(R.id.tv_music_title)
+    public TextView musicTitle;
+    @BindView(R.id.tv_music_msg)
+    public TextView musicAutor;
+    @BindView(R.id.iv_music_album)
+    public ImageView musicImage;
+
     public RecommendViewHolder(View itemView) {
         super(itemView);
-        //TODO edit this here
+        ButterKnife.bind(this, itemView);
     }
 }

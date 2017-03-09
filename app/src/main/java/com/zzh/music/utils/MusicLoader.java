@@ -134,6 +134,7 @@ public class MusicLoader {
                 music.setMusicSize(size);
                 music.setMusicArtist(artist);
                 music.setMusicUrl(url);
+                music.setMusicPath(url);
                 music.setMusicName(title);
                 music.setMusicAlbumId(albumId);
                 music.setMusicTitle(albumTitle);

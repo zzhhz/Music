@@ -1,10 +1,7 @@
 package com.zzh.music.fragment;
 
-import android.os.Bundle;
 import android.os.Message;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.zzh.music.R;
 import com.zzh.music.base.BaseFragment;
@@ -23,14 +20,8 @@ public class AlbumFragment extends BaseFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_album, container, false);
+    protected int setLayoutResId() {
+        return R.layout.fragment_album;
     }
 
     @Override

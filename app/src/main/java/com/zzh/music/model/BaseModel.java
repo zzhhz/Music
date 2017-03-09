@@ -1,5 +1,7 @@
 package com.zzh.music.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -14,8 +16,12 @@ import java.util.List;
 public abstract class BaseModel<T> {
     private String status;
     private String msg;
+    @SerializedName(value = "contents", alternate = {"song_list"})
     private List<T> contents;
     private T content;
+    @SerializedName(value = "error_code")
+    private String errorCode;
+    private Billboard billboard;
 
     public String getStatus() {
         return status;
@@ -47,5 +53,21 @@ public abstract class BaseModel<T> {
 
     public void setContent(T content) {
         this.content = content;
+    }
+
+    public Billboard getBillboard() {
+        return billboard;
+    }
+
+    public void setBillboard(Billboard billboard) {
+        this.billboard = billboard;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
     }
 }

@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.zzh.music.R;
 import com.zzh.music.base.BaseMusicActivity;
@@ -35,12 +36,18 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     private ViewPager mViewPager;
     private CDView mCDView;//转盘文件
     private LrcView mLrcView;// 歌词显示
+    public static final int AUTO_PLAYER = 0X000;
+    private boolean isAutoPlayer = false;
+    private Button mStartOrStop;
 
 
     ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mMusicService = ((MusicService.MusicBinder) service).getMusicService();
+            if (isAutoPlayer && !mMusicService.isPlaying()){
+                mMusicService.startMusicPlayer();
+            }
         }
 
         @Override
@@ -67,6 +74,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
                 layout.scrollToFinishActivity();
             }
         });
+        mStartOrStop = (Button) findViewById(R.id.btn_player_stop);
 
     }
 
@@ -88,18 +96,36 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
 
     @Override
     protected void handlerMessage(Message msg) {
+        switch (msg.what){
+            case AUTO_PLAYER:
+
+                break;
+        }
 
     }
 
     @Override
     public void onClick(View v) {
+        playOrStop(v);
+    }
 
+    private void playOrStop(View v) {
+        if (mMusicService == null){
+            return;
+        }
         switch (v.getId()){
             case R.id.btn_last_songs:
                 break;
             case R.id.btn_next_songs:
                 break;
             case R.id.btn_player_stop:
+                if (mMusicService.isPlaying()){
+                    mStartOrStop.setText("暂停");
+                    mMusicService.pauseMusicPlayer();
+                } else {
+                    mStartOrStop.setText("开始");
+                    mMusicService.startMusicPlayer();
+                }
                 break;
             default:
                 break;

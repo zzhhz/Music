@@ -11,6 +11,7 @@ import com.zzh.music.R;
 import com.zzh.music.activity.DetailActivity;
 import com.zzh.music.holder.RecommendViewHolder;
 import com.zzh.music.model.Music;
+import com.zzh.music.utils.web.GlideUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,9 @@ public class RecommendAdapter extends LRecyclerView.Adapter<RecommendViewHolder>
     @Override
     public void onBindViewHolder(RecommendViewHolder holder, int position) {
         Music item = dataList.get(position);
+        GlideUtils.loadImageIntoView(mContext, item.getPicBig(), holder.musicImage);
+        holder.musicAutor.setText(item.getAuthor());
+        holder.musicTitle.setText(item.getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

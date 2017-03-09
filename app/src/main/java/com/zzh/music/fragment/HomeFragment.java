@@ -1,12 +1,9 @@
 package com.zzh.music.fragment;
 
 import android.Manifest;
-import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
@@ -43,15 +40,9 @@ public class HomeFragment extends BaseFragment {
     public HomeFragment() {
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        initView(view);
-        initData();
-        setViewListener();
-        return view;
+    protected int setLayoutResId() {
+        return R.layout.fragment_home;
     }
 
     //初始化控件
@@ -115,9 +106,9 @@ public class HomeFragment extends BaseFragment {
                 int start = mAdapter.getItemCount();
                 mAdapter.addAll((List<Music>) msg.obj);
                 isLoadComplete = false;
-                if (page == 0){
+                if (page == 0) {
                     mAdapter.notifyDataSetChanged();
-                }else {
+                } else {
                     mAdapter.notifyItemRangeChanged(start, mAdapter.getItemCount());
                 }
                 mRecommend.refreshComplete(8);
@@ -126,6 +117,7 @@ public class HomeFragment extends BaseFragment {
             case NO_MORE:
                 isLoadComplete = true;
                 mRecommend.setNoMore(isLoadComplete);
+                mRecommend.refreshComplete(8);
                 break;
         }
 
@@ -139,7 +131,7 @@ public class HomeFragment extends BaseFragment {
                 Message msg = Message.obtain();
                 msg.what = REFRESH_COMPLETE;
                 msg.obj = musicList;
-                if (musicList == null || musicList.size() == 0){
+                if (musicList == null || musicList.size() == 0) {
                     mHandler.sendEmptyMessage(NO_MORE);
                 } else {
                     mHandler.sendMessage(msg);
