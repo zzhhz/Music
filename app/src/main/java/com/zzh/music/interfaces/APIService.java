@@ -31,7 +31,7 @@ public interface APIService {
 
     @GET("v1/restserver/ting")
     Observable<ResponseBody> testApi(@QueryMap Map<String, String> params);
-    @GET("v1/restserver/ting")
+    @POST("/v1/restserver/ting")
     Observable<BaseModel<Music>> getRecommendType(@QueryMap Map<String, String> params);
 
 

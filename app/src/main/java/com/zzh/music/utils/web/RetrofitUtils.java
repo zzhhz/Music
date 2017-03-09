@@ -7,7 +7,6 @@ import com.zzh.music.interfaces.APIService;
 import java.io.IOException;
 
 import okhttp3.Interceptor;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -50,7 +49,7 @@ public class RetrofitUtils {
                     Request request = chain.request();
                     Log.e("---url--", "----request url: " +request.toString());
                     Response response = chain.proceed(chain.request());
-                    MediaType mediaType = response.body().contentType();
+                    okhttp3.MediaType mediaType = response.body().contentType();
                     String content = response.body().string();
 
                     return response.newBuilder().body(ResponseBody.create(mediaType, content)).build();

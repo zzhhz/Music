@@ -6,6 +6,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
+import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.zzh.libs.widget.ZRecyclerView;
 import com.zzh.music.R;
@@ -72,6 +73,14 @@ public class RecommendFragment extends BaseFragment {
                 reloadData(page);
             }
         });
+
+        mRecommend.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 0;
+                reloadData(page);
+            }
+        });
     }
 
     @Override
@@ -84,35 +93,23 @@ public class RecommendFragment extends BaseFragment {
         return "推荐";
     }
 
-    private void reloadData(int page) {
+    private void reloadData(final int page) {
         Map<String, String> params = new ZCurHashMap();
         params.put("method", "baidu.ting.billboard.billList");
         params.put("type", "1");
         params.put("size", "10");
         params.put("offset", RetrofitUtils.nextPage(page));
-        RetrofitUtils.Api().getRecommendType(params).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(Schedulers.io()).subscribe(new BaseSubscriber<BaseModel<Music>>(getActivity()) {
+        RetrofitUtils.Api().getRecommendType(params).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<BaseModel<Music>>(getActivity()) {
             @Override
             public void onNext(BaseModel<Music> baseModel) {
+                if (page == 0){
+                    mAdapter.clear();
+                }
                 List<Music> musicList = baseModel.getContents();
                 mAdapter.addAll(musicList);
                 mViewAdapter.notifyDataSetChanged();
                 mRecommend.refreshComplete(10);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                super.onError(e);
-            }
-
-            @Override
-            public void onStart() {
-                super.onStart();
-            }
-
-            @Override
-            public void onCompleted() {
-                super.onCompleted();
             }
         });
     }

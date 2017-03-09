@@ -13,10 +13,10 @@ import java.util.List;
  * @Author: zzh
  * @Description: 基类
  */
-public abstract class BaseModel<T> {
+public class BaseModel<T> {
     private String status;
     private String msg;
-    @SerializedName(value = "contents", alternate = {"song_list"})
+    @SerializedName(value = "song_list", alternate = {"contents"})
     private List<T> contents;
     private T content;
     @SerializedName(value = "error_code")
