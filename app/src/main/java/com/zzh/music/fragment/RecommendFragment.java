@@ -40,6 +40,7 @@ public class RecommendFragment extends BaseFragment {
     private StaggeredGridLayoutManager mManager;
     private LRecyclerViewAdapter mViewAdapter;
     private int page = 0;
+
     public RecommendFragment() {
     }
 
@@ -69,7 +70,7 @@ public class RecommendFragment extends BaseFragment {
         mRecommend.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                page++;
+                page += 1;
                 reloadData(page);
             }
         });
@@ -103,7 +104,7 @@ public class RecommendFragment extends BaseFragment {
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<BaseModel<Music>>(getActivity()) {
             @Override
             public void onNext(BaseModel<Music> baseModel) {
-                if (page == 0){
+                if (page == 0) {
                     mAdapter.clear();
                 }
                 List<Music> musicList = baseModel.getContents();

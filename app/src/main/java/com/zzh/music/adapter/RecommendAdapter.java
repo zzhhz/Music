@@ -54,8 +54,8 @@ public class RecommendAdapter extends LRecyclerView.Adapter<RecommendViewHolder>
 
     @Override
     public void onBindViewHolder(RecommendViewHolder holder, int position) {
-        Music item = dataList.get(position);
-        GlideUtils.loadImageIntoView(mContext, item.getPicBig(), holder.musicImage);
+        Music item = dataList.get(position);GlideUtils.loadImageIntoView(mContext, item.getPicBig(), holder.musicImage);
+
         holder.musicAutor.setText(item.getAuthor());
         holder.musicTitle.setText(item.getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
