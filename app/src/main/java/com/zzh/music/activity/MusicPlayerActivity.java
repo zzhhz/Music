@@ -1,26 +1,26 @@
 package com.zzh.music.activity;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.view.ViewPager;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import com.zzh.music.MusicApplication;
 import com.zzh.music.R;
 import com.zzh.music.base.BaseMusicActivity;
-import com.zzh.music.loader.ImageLoader;
 import com.zzh.music.model.Music;
 import com.zzh.music.service.MusicService;
+import com.zzh.music.utils.ColorUtils;
 import com.zzh.music.utils.MusicLoader;
 import com.zzh.music.widget.CDView;
 import com.zzh.music.widget.LrcView;
@@ -48,7 +48,12 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     public ViewGroup mPlayerContainer;
     public static final int AUTO_PLAYER = 0X000;
     private boolean isAutoPlayer = false;
-    private Button mStartOrStop;
+    @BindView(R.id.btn_player_stop)
+    public ImageView mStartOrStop;
+    @BindView(R.id.activity_music_player)
+    public View mAllContainer;
+    @BindView(R.id.appBarLayout)
+    public View mAppBarLayout;
 
 
     ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -78,20 +83,27 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         //toolbars("播放详情");
         Intent intentMusic = getIntent();
         mMusic = (Music) intentMusic.getSerializableExtra(DATA_MUSIC_PLAYER);
-        toolbars(R.id.toolbars, R.mipmap.icon_back, mMusic.getMusicName(), new View.OnClickListener() {
+        String title = mMusic.getMusicName();
+        if (TextUtils.isEmpty(title)){
+            title = "正在播放";
+        } else {
+            if (title.contains(".mp3")){
+                title = title.replace(".mp3", "");
+            }
+        }
+        toolbars(R.id.toolbars, R.mipmap.icon_back, title, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SwipeBackLayout layout = getSwipeBackLayout();
                 layout.scrollToFinishActivity();
             }
         });
-        mStartOrStop = (Button) findViewById(R.id.btn_player_stop);
         mCDView = new CDView(mContext);
         Bitmap art = MusicLoader.getInstance(this).getMusicArt(mMusic.getId(), mMusic.getMusicAlbumId(), false);
         if (art == null) {
             art = BitmapFactory.decodeResource(getResources(), R.mipmap.menu_header_bg);
         }
-
+        setBackgroundBlur(art);
         int width = MusicApplication.DISPLAY_WIDTH * 3 / 5;
         mCDView.setWidthAndHeight(width, width);
         mCDView.setImage(art);
@@ -102,9 +114,9 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     @Override
     protected void initData() {
         //启动音乐播放服务
-        Intent intent = new Intent(mContext, MusicService.class);
-        intent.putExtra("data", mMusic);
-        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+//        Intent intent = new Intent(mContext, MusicService.class);
+//        intent.putExtra("data", mMusic);
+//        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -140,16 +152,22 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
             case R.id.btn_next_songs:
                 break;
             case R.id.btn_player_stop:
-                if (mMusicService.isPlaying()) {
-                    mStartOrStop.setText("暂停");
-                } else {
-                    mStartOrStop.setText("开始");
-                }
-                mMusicService.pauseMusicPlayer();
+                //pauseOrStop();
                 break;
             default:
                 break;
         }
+    }
+
+    private void pauseOrStop() {
+        if (mMusicService.isPlaying()) {
+            //mStartOrStop.setText("暂停");
+            mStartOrStop.setBackgroundResource(R.mipmap.music_pause_button);
+        } else {
+            //mStartOrStop.setText("开始");
+            mStartOrStop.setBackgroundResource(R.mipmap.music_play_button);
+        }
+        mMusicService.pauseMusicPlayer();
     }
 
     @Override
@@ -157,6 +175,19 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         super.onPause();
         //解绑服务
         //unbindService(mServiceConnection);
+    }
+
+    public void setBackgroundBlur(Bitmap src){
+        Palette.Builder builder = new Palette.Builder(src);
+        builder.generate(new Palette.PaletteAsyncListener() {
+            @Override
+            public void onGenerated(Palette palette) {
+                int color = palette.getVibrantColor(ColorUtils.getColor(mContext));
+                mAllContainer.setBackgroundColor(color);
+                mToolbar.setBackgroundColor(color);
+                mAppBarLayout.setBackgroundColor(color);
+            }
+        });
     }
 
     @Override

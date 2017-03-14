@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_music_player"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.zzh.music.activity.MusicPlayerActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_music_player"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.zzh.music.activity.MusicPlayerActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -18,8 +18,7 @@
             android:id="@+id/toolbars"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorGlobe"
-            app:titleTextColor="@color/color_white_title" />
+            app:titleTextColor="@color/color_white_title"/>
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
@@ -34,8 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_weight="3"
-            android:gravity="center"
-            android:background="@color/test_blue">
+            android:gravity="center">
 
         </RelativeLayout>
 
@@ -43,8 +41,7 @@
             android:id="@+id/rl_music_lrc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/test_green">
+            android:layout_weight="1">
             <!--歌词-->
         </RelativeLayout>
 
@@ -52,8 +49,7 @@
             android:id="@+id/rl_music_seek_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/test_red">
+            android:layout_weight="1">
             <!--进度-->
         </RelativeLayout>
 
@@ -62,8 +58,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/colorGlobe">
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -71,35 +66,42 @@
             android:layout_centerHorizontal="true"
             android:orientation="horizontal"
             android:paddingBottom="5dp"
-            android:paddingTop="5dp">
+            android:paddingTop="10dp">
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/iv_player_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/play_btn_distance"
+                android:background="@mipmap/music_repeat_button"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_last_songs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="上一曲" />
+                android:layout_marginRight="@dimen/play_btn_distance"
+                android:background="@mipmap/music_beginning_button" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_player_stop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="暂停" />
+                android:background="@mipmap/music_stop_button"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_next_songs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="下一曲" />
-            <ImageView
+                android:layout_marginLeft="@dimen/play_btn_distance"
+                android:background="@mipmap/music_end_button"/>
+
+            <ImageButton
                 android:id="@+id/iv_player_list"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/play_btn_distance"
+                android:background="@mipmap/music_playlist"/>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

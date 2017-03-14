@@ -34,7 +34,8 @@
             android:exported="true">
         </service>
 
-        <activity android:name=".activity.MusicPlayerActivity"/>
+        <activity android:name=".activity.MusicPlayerActivity"
+            android:theme="@style/AppPlayerTheme"/>
     </application>
 
 </manifest>

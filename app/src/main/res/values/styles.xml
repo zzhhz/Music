@@ -3,4 +3,7 @@
         <item name="colorAccent">@color/colorGlobe</item>
         <item name="colorPrimaryDark">@color/colorGlobe</item>
     </style>
+    <style name="AppPlayerTheme" parent="Theme.Translucent.System.Bar">
+        <item name="colorAccent">@color/colorGlobe</item>
+    </style>
 </resources>

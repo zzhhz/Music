@@ -1,5 +1,9 @@
 package com.zzh.music.utils;
 
+import android.content.Context;
+
+import com.zzh.music.R;
+
 import java.util.Random;
 
 /**
@@ -56,5 +60,9 @@ public class ColorUtils {
         blue = blue.length()==1 ? "0" + blue : blue ;
         //生成十六进制颜色值
         return "#"+red+green+blue;
+    }
+
+    public static int getColor(Context ctx){
+        return ctx.getResources().getColor(R.color.baseColor);
     }
 }
