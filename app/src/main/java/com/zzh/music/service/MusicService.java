@@ -4,6 +4,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.annotation.IntDef;
+import android.util.Log;
 
 import com.zzh.music.activity.MusicPlayerActivity;
 import com.zzh.music.model.Music;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
@@ -24,6 +27,8 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  * @Description: 音乐播放的服务。用于音乐后台的播放
  */
 public class MusicService extends Service {
+
+    public static String TAG = "---MusicService---";
 
     private IBinder mIBinder = null;
 //    private MediaPlayer mMediaPlayer = null;
@@ -50,6 +55,12 @@ public class MusicService extends Service {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand: 音乐播放服务启动了");
+        return START_REDELIVER_INTENT; //被异常杀死时，再启动服务，并且接收intent
+    }
+
+    @Override
     public IBinder onBind(Intent intent) {
         //播放音乐
         mMusic = (Music) intent.getSerializableExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER);
@@ -60,6 +71,14 @@ public class MusicService extends Service {
             mMediaPlayer.setDataSource(mMusic.getMusicPath());
             mMediaPlayer.prepareAsync();
             mMediaPlayer.seekTo(0);
+
+            mMediaPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(IMediaPlayer iMediaPlayer) {
+                    Log.d(TAG, "onCompletion: ---------------------");
+                    // 播放完成
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }

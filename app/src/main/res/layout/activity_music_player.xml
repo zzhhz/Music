@@ -22,13 +22,42 @@
             app:titleTextColor="@color/color_white_title" />
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
-        android:id="@+id/vp_music_slide"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3">
+        android:layout_weight="3"
+        android:orientation="vertical">
 
-    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/vp_music_slide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:background="@color/test_blue">
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_music_lrc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/test_green">
+            <!--歌词-->
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_music_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/test_red">
+            <!--进度-->
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -43,6 +72,12 @@
             android:orientation="horizontal"
             android:paddingBottom="5dp"
             android:paddingTop="5dp">
+
+            <ImageView
+                android:id="@+id/iv_player_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
 
             <Button
                 android:id="@+id/btn_last_songs"
@@ -61,6 +96,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="下一曲" />
+            <ImageView
+                android:id="@+id/iv_player_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

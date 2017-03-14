@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.zzh.music.MainActivity;
 import com.zzh.music.R;
+import com.zzh.music.service.MusicService;
 import com.zzh.zlibs.base.BaseNoSwipeBackActivity;
 
 /**
@@ -34,6 +35,8 @@ public class SplashActivity extends BaseNoSwipeBackActivity {
 
     @Override
     protected void initView() {
+        Intent intent = new Intent(this, MusicService.class);
+        startService(intent);
         mSplash = (ImageView) findViewById(R.id.riv_splash);
         PropertyValuesHolder valuesHolderX = PropertyValuesHolder.ofFloat("scaleX", 1, 1.5f);
         PropertyValuesHolder valuesHolderY = PropertyValuesHolder.ofFloat("scaleY", 1, 1.5f);
@@ -76,7 +79,7 @@ public class SplashActivity extends BaseNoSwipeBackActivity {
     @Override
     protected void handlerMessage(Message msg) {
 
-        switch (msg.what){
+        switch (msg.what) {
             case 0:
                 Intent main = new Intent(this, MainActivity.class);
                 startActivity(main);
@@ -92,7 +95,7 @@ public class SplashActivity extends BaseNoSwipeBackActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             return true;
         }
         return super.onKeyDown(keyCode, event);

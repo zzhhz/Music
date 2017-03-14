@@ -62,10 +62,10 @@ public class MusicLoader {
     public static MusicLoader getInstance(Context ctx){
         synchronized (MusicLoader.class) {
             if (musicLoader == null) {
+                mContext = ctx;
                 contentResolver = ctx.getContentResolver();
                 musicLoader = new MusicLoader();
-                mCachedBit = getDefaultArtwork(ctx);
-                mContext = ctx;
+                mCachedBit = getDefaultArtwork();
                 imageWidth = (DensityUtils.getDisplayWidth(ctx) - 20) / 2;
             }
         }
@@ -149,12 +149,12 @@ public class MusicLoader {
         return uri;
     }
 
-    public Bitmap getMusicArt(Context context, long song_id, long album_id, boolean allowdefault){
+    public Bitmap getMusicArt(long song_id, long album_id, boolean allowdefault){
         if (album_id < 0) {
             // This is something that is not in the database, so get the album art directly
             // from the file.
             if (song_id >= 0) {
-                Bitmap bm = getArtworkFromFile(context, song_id, -1);
+                Bitmap bm = getArtworkFromFile(song_id, -1);
                 if (bm != null) {
                     return bm;
                 }
@@ -164,7 +164,7 @@ public class MusicLoader {
             }
             return null;
         }
-        ContentResolver res = context.getContentResolver();
+        ContentResolver res = mContext.getContentResolver();
         Uri uri = ContentUris.withAppendedId(sArtworkUri, album_id);
         if (uri != null) {
             InputStream in = null;
@@ -174,7 +174,7 @@ public class MusicLoader {
             } catch (FileNotFoundException ex) {
                 // The album art thumbnail does not actually exist. Maybe the user deleted it, or
                 // maybe it never existed to begin with.
-                Bitmap bm = getArtworkFromFile(context, song_id, album_id);
+                Bitmap bm = getArtworkFromFile(song_id, album_id);
                 if (bm != null) {
                     if (bm.getConfig() == null) {
                         bm = bm.copy(Bitmap.Config.RGB_565, false);
@@ -199,7 +199,7 @@ public class MusicLoader {
         return null;
     }
 
-    private static Bitmap getArtworkFromFile(Context context, long songid, long albumid) {
+    private static Bitmap getArtworkFromFile(long songid, long albumid) {
         Bitmap bm = null;
         byte [] art = null;
         String path = null;
@@ -209,14 +209,14 @@ public class MusicLoader {
         try {
             if (albumid < 0) {
                 Uri uri = Uri.parse("content://media/external/audio/media/" + songid + "/albumart");
-                ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r");
+                ParcelFileDescriptor pfd = mContext.getContentResolver().openFileDescriptor(uri, "r");
                 if (pfd != null) {
                     FileDescriptor fd = pfd.getFileDescriptor();
                     bm = BitmapFactory.decodeFileDescriptor(fd);
                 }
             } else {
                 Uri uri = ContentUris.withAppendedId(sArtworkUri, albumid);
-                ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r");
+                ParcelFileDescriptor pfd = mContext.getContentResolver().openFileDescriptor(uri, "r");
                 if (pfd != null) {
                     FileDescriptor fd = pfd.getFileDescriptor();
                     bm = BitmapFactory.decodeFileDescriptor(fd);
@@ -232,11 +232,11 @@ public class MusicLoader {
     }
 
     //裁剪图片
-    private static Bitmap getDefaultArtwork(Context context) {
+    private static Bitmap getDefaultArtwork() {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inPreferredConfig = Bitmap.Config.RGB_565;
         // BitmapFactory.decodeStream(context.getResources().getDrawable(R.mipmap.ic_launcher), null, opts);
-        return BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher, opts);
+        return BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_launcher, opts);
     }
 
     private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");

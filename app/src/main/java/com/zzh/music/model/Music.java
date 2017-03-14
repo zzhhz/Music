@@ -1,6 +1,7 @@
 package com.zzh.music.model;
 
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -158,21 +159,34 @@ public class Music implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {//路径一样，就表示是同一个歌曲
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Music)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Music music = (Music) o;
 
-        return musicPath.equals(music.musicPath);
+        if (TextUtils.isEmpty(songId)) {
+            return musicPath.equals(music.getMusicPath());
+        }
+
+        if (!musicPath.equals(music.musicPath)) return false;
+
+        return songId.equals(music.songId);
 
     }
 
     @Override
     public int hashCode() {
-        return musicPath.hashCode();
+        if (TextUtils.isEmpty(musicPath)) {
+            return songId.hashCode();
+        }
+        if (TextUtils.isEmpty(songId)) {
+            return musicPath.hashCode();
+        }
+        int result = musicPath.hashCode();
+        result = 31 * result + songId.hashCode();
+        return result;
     }
-
 
     @SerializedName(value = "artist_id")
     private String artistId;
@@ -589,5 +603,9 @@ public class Music implements Serializable {
 
     public void setArtistName(String artistName) {
         this.artistName = artistName;
+    }
+
+    public enum MUSIC_MODEL {
+        SINGLE_LOOP/*单曲循环*/, EACH_LOOP/*一次循环*/, RANDOM_LOOP/*随机播放*/, ONE_LOOP/*播放一次*/
     }
 }

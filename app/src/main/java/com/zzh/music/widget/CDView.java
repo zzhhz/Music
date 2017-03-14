@@ -12,7 +12,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 
+import com.zzh.music.MusicApplication;
 import com.zzh.music.R;
 
 /**
@@ -38,6 +40,17 @@ public class CDView extends View {
     private Matrix mMatrix;
 
     private volatile boolean isRunning;
+    private int mWidth = 0; //宽高
+    private int mHeight = 0;
+
+    public void setWidthAndHeight(int mWidth, int mHeight) {
+        this.mWidth = mWidth;
+        this.mHeight = mHeight;
+    }
+
+    public CDView(Context context) {
+        this(context, null, 0);
+    }
 
     public CDView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -103,17 +116,18 @@ public class CDView extends View {
         if (mClipBitmap == null)
             return;
         canvas.save();
-        mMatrix.setRotate(mRotation, getMeasuredWidth() / 2,
-                getMeasuredHeight() / 2);
+        mMatrix.setRotate(mRotation, mWidth / 2,
+                mHeight / 2);
         canvas.drawBitmap(mClipBitmap, mMatrix, null);
         canvas.drawBitmap(mCircleBitmap,
-                (getMeasuredWidth() - mCircleBitmap.getWidth()) / 2,
-                (getMeasuredHeight() - mCircleBitmap.getHeight()) / 2, null);
+                mWidth,
+                mHeight, null);
         canvas.restore();
     }
 
     /**
      * 创建圆形剪切图
+     *
      * @param src
      * @return
      */
@@ -121,12 +135,12 @@ public class CDView extends View {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setARGB(255, 241, 239, 229);
 
-        Bitmap target = Bitmap.createBitmap(getMeasuredWidth(),
-                getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap target = Bitmap.createBitmap(mWidth,
+                mHeight, Bitmap.Config.ARGB_8888);
+        src = Bitmap.createScaledBitmap(src, mWidth, mHeight, false);
         Canvas canvas = new Canvas(target);
 
-        canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredWidth() / 2,
-                getMeasuredWidth() / 2, paint);
+        canvas.drawCircle(mWidth / 2, mWidth / 2, mWidth / 2, paint);
 
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(src, 0, 0, paint);
@@ -136,6 +150,7 @@ public class CDView extends View {
 
     /**
      * 设置cd图片
+     *
      * @param bmp
      */
     public void setImage(Bitmap bmp) {

@@ -29,4 +29,7 @@
     <color name="background_app">#dedede</color>
     <color name="background_new_tag">#ff0000</color>
     <color name="text_new_tag">#ffffff</color>
+    <color name="test_red">#f00</color>
+    <color name="test_green">#0f0</color>
+    <color name="test_blue">#00f</color>
 </resources>
