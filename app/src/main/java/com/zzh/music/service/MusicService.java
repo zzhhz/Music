@@ -4,8 +4,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.zzh.music.MusicConstants;
 import com.zzh.music.activity.MusicPlayerActivity;
 import com.zzh.music.helper.MusicHelper;
 import com.zzh.music.model.Music;
@@ -65,11 +67,20 @@ public class MusicService extends Service {
     public IBinder onBind(Intent intent) {
         //播放音乐
         mMusic = (Music) intent.getSerializableExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER);
-        if (!mCurrentListPlayer.contains(mMusic)) {
-            mCurrentListPlayer.add(mMusic);
+        playMusic(mMusic);
+        return mIBinder;
+    }
+
+    public void playMusic(Music music) {
+        if (!mCurrentListPlayer.contains(music)) {
+            mCurrentListPlayer.add(music);
         }
         try {
-            mMediaPlayer.setDataSource(mMusic.getMusicPath());
+            String musicUrl = music.getMusicPath();
+            if (TextUtils.isEmpty(musicUrl)){
+                musicUrl = String.format(MusicConstants.URL_NETWORK_MUSIC_PLAY, "baidu.ting.song.play",""+music.getSongId());
+            }
+            mMediaPlayer.setDataSource(musicUrl);
             mMediaPlayer.prepareAsync();
             mMediaPlayer.seekTo(0);
 
@@ -83,7 +94,6 @@ public class MusicService extends Service {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return mIBinder;
     }
 
     /**
@@ -193,5 +203,9 @@ public class MusicService extends Service {
 
     public MusicHelper.PlayerType getPlayerType() {
         return mPlayType;
+    }
+
+    public void clearPlayMusicList(){
+        mCurrentListPlayer.clear();
     }
 }

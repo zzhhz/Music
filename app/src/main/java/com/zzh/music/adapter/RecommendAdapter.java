@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.zzh.music.R;
-import com.zzh.music.activity.DetailActivity;
+import com.zzh.music.activity.MusicPlayerActivity;
 import com.zzh.music.holder.RecommendViewHolder;
 import com.zzh.music.model.Music;
 import com.zzh.music.utils.web.GlideUtils;
@@ -54,15 +54,15 @@ public class RecommendAdapter extends LRecyclerView.Adapter<RecommendViewHolder>
 
     @Override
     public void onBindViewHolder(RecommendViewHolder holder, int position) {
-        Music item = dataList.get(position);GlideUtils.loadImageIntoView(mContext, item.getPicBig(), holder.musicImage);
+        final Music item = dataList.get(position);GlideUtils.loadImageIntoView(mContext, item.getPicBig(), holder.musicImage);
 
         holder.musicAutor.setText(item.getAuthor());
         holder.musicTitle.setText(item.getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, DetailActivity.class);
-                intent.putExtra(DetailActivity.TYPE_FRAGMENT, DetailActivity.TYPE_FRAGMENT_ALBUM_DETAIL);
+                Intent intent = new Intent(mContext, MusicPlayerActivity.class);
+                intent.putExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER, item);
                 mContext.startActivity(intent);
             }
         });

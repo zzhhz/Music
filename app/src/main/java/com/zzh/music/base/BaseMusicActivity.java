@@ -1,8 +1,10 @@
 package com.zzh.music.base;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 
 import com.zzh.music.MusicApplication;
+import com.zzh.zlibs.swipe.SwipeBackLayout;
 
 
 /**
@@ -29,5 +31,16 @@ public abstract class BaseMusicActivity extends com.zzh.zlibs.base.BaseActivity 
     protected void onDestroy() {
         super.onDestroy();
         MusicApplication.mAllStartActivity.remove(this);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            SwipeBackLayout layout = getSwipeBackLayout();
+            layout.scrollToFinishActivity();
+            return true;
+        }else {
+            return super.onKeyDown(keyCode, event);
+        }
     }
 }

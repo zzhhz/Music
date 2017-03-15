@@ -7,4 +7,5 @@
     <color name="baseColor">#a31919e6</color>
     <color name="colorGlobe">#9c27b0</color>
     <color name="color_white_title">#ffffff</color>
+    <color name="color_line">#e93a3a3a</color>
 </resources>
