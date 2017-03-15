@@ -10,4 +10,10 @@
         <attr name="dividerHeight" format="dimension" />
         <attr name="rows" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="BlurredView">
+        <attr name="src" format="reference"/>
+        <attr name="move" format="boolean"/>
+        <attr name="disableBlurred" format="boolean"/>
+    </declare-styleable>
 </resources>

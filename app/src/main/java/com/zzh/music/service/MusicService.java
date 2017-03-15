@@ -4,10 +4,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
 import android.util.Log;
 
 import com.zzh.music.activity.MusicPlayerActivity;
+import com.zzh.music.helper.MusicHelper;
 import com.zzh.music.model.Music;
 
 import java.io.IOException;
@@ -31,10 +31,11 @@ public class MusicService extends Service {
     public static String TAG = "---MusicService---";
 
     private IBinder mIBinder = null;
-//    private MediaPlayer mMediaPlayer = null;
+    //    private MediaPlayer mMediaPlayer = null;
     private Music mMusic;
     private IjkMediaPlayer mMediaPlayer;
     public static final List<Music> mCurrentListPlayer;
+    private MusicHelper.PlayerType mPlayType = MusicHelper.PlayerType.ONE_LOOP;
 
     static {
         //初始化
@@ -64,7 +65,7 @@ public class MusicService extends Service {
     public IBinder onBind(Intent intent) {
         //播放音乐
         mMusic = (Music) intent.getSerializableExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER);
-        if (!mCurrentListPlayer.contains(mMusic)){
+        if (!mCurrentListPlayer.contains(mMusic)) {
             mCurrentListPlayer.add(mMusic);
         }
         try {
@@ -85,13 +86,29 @@ public class MusicService extends Service {
         return mIBinder;
     }
 
+    /**
+     * 上一曲
+     */
+    public void previousSongs() {
+
+    }
+
+    /**
+     * 下一曲
+     */
+    public void nextSongs() {
+
+    }
+
     //
     public class MusicBinder extends Binder {
         private MusicService mMusicService;
-        public MusicBinder (MusicService service){
+
+        public MusicBinder(MusicService service) {
             mMusicService = service;
         }
-        public MusicService getMusicService(){
+
+        public MusicService getMusicService() {
             return mMusicService;
         }
     }
@@ -107,31 +124,30 @@ public class MusicService extends Service {
     }
 
     //音乐播放的位置
-    public long getMusicPositionPlayer(){
+    public long getMusicPositionPlayer() {
         return mMediaPlayer.getCurrentPosition();
     }
 
-    public boolean isPlaying()
-    {
+    public boolean isPlaying() {
         return mMediaPlayer.isPlaying();
     }
 
     /**
      * 开始播放
      */
-    public void startMusicPlayer()
-    {
+    public void startMusicPlayer() {
         if (mMediaPlayer != null) {
             mMediaPlayer.reset();
             mMediaPlayer.start();
         }
     }
+
     /**
      * 停止
      */
-    public void stopMusicPlayer(){
+    public void stopMusicPlayer() {
 
-        if (mMediaPlayer != null){
+        if (mMediaPlayer != null) {
             mMediaPlayer.stop();
         }
     }
@@ -139,13 +155,43 @@ public class MusicService extends Service {
     /**
      * 暂停
      */
-    public void pauseMusicPlayer(){
-        if (mMediaPlayer != null){
+    public void pauseMusicPlayer() {
+        if (mMediaPlayer != null) {
             if (isPlaying()) {
                 mMediaPlayer.pause();
             } else {
                 mMediaPlayer.start();
             }
         }
+    }
+
+    public MusicHelper.PlayerType changePlayType() {
+        return changePlayType(null);
+    }
+
+    public MusicHelper.PlayerType changePlayType(MusicHelper.PlayerType type) {
+        if (type == null) {
+            switch (mPlayType) {
+                case SINGLE_LOOP:
+                    mPlayType = MusicHelper.PlayerType.EACH_LOOP;
+                    break;
+                case EACH_LOOP:
+                    mPlayType = MusicHelper.PlayerType.RANDOM_LOOP;
+                    break;
+                case RANDOM_LOOP:
+                    mPlayType = MusicHelper.PlayerType.ONE_LOOP;
+                    break;
+                case ONE_LOOP:
+                    mPlayType = MusicHelper.PlayerType.SINGLE_LOOP;
+                    break;
+            }
+        } else {
+            mPlayType = type;
+        }
+        return mPlayType;
+    }
+
+    public MusicHelper.PlayerType getPlayerType() {
+        return mPlayType;
     }
 }

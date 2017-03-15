@@ -6,4 +6,9 @@
     <style name="AppPlayerTheme" parent="Theme.Translucent.System.Bar">
         <item name="colorAccent">@color/colorGlobe</item>
     </style>
+
+    <style name="Pop_Bottom_In">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
 </resources>

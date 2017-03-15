@@ -1,107 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/activity_music_player"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.zzh.music.activity.MusicPlayerActivity">
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="18dp">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbars"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:titleTextColor="@color/color_white_title"/>
-    </android.support.design.widget.AppBarLayout>
+<com.zzh.music.ui.view.RelativeLayoutBlurredView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_music_player"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.zzh.music.activity.MusicPlayerActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/vp_music_slide"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_weight="3"
-            android:gravity="center">
+            android:background="@android:color/transparent"
+            android:paddingTop="20dp">
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_music_lrc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <!--歌词-->
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_music_seek_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <!--进度-->
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbars"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:titleTextColor="@color/color_white_title" />
+        </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingTop="10dp">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/iv_player_type"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/vp_music_slide"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/play_btn_distance"
-                android:background="@mipmap/music_repeat_button"/>
+                android:layout_centerInParent="true"
+                android:layout_weight="3"
+                android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/btn_last_songs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/play_btn_distance"
-                android:background="@mipmap/music_beginning_button" />
+            </RelativeLayout>
 
-            <ImageButton
-                android:id="@+id/btn_player_stop"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/rl_music_lrc"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/music_stop_button"/>
+                android:layout_weight="1">
+                <!--歌词-->
+            </RelativeLayout>
 
-            <ImageButton
-                android:id="@+id/btn_next_songs"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/rl_music_seek_bar"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/play_btn_distance"
-                android:background="@mipmap/music_end_button"/>
+                android:layout_weight="1">
+                <!--进度-->
+            </RelativeLayout>
 
-            <ImageButton
-                android:id="@+id/iv_player_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/play_btn_distance"
-                android:background="@mipmap/music_playlist"/>
         </LinearLayout>
-    </RelativeLayout>
-</LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingTop="10dp">
+
+                <ImageButton
+                    android:id="@+id/iv_player_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/play_left_right_btn_distance"
+                    android:background="@mipmap/music_repeat_button" />
+
+                <ImageButton
+                    android:id="@+id/btn_last_songs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/play_btn_distance"
+                    android:background="@mipmap/music_beginning_button" />
+
+                <ImageButton
+                    android:id="@+id/btn_player_stop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/music_stop_button" />
+
+                <ImageButton
+                    android:id="@+id/btn_next_songs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/play_btn_distance"
+                    android:background="@mipmap/music_end_button" />
+
+                <ImageButton
+                    android:id="@+id/iv_player_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/play_left_right_btn_distance"
+                    android:background="@mipmap/music_playlist" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</com.zzh.music.ui.view.RelativeLayoutBlurredView>
