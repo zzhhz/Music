@@ -1,10 +1,15 @@
 package com.zzh.music.base;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
 import com.zzh.music.MusicApplication;
 import com.zzh.zlibs.swipe.SwipeBackLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 /**
@@ -25,22 +30,30 @@ public abstract class BaseMusicActivity extends com.zzh.zlibs.base.BaseActivity 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);//注册事件
         MusicApplication.mAllStartActivity.add(this);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         MusicApplication.mAllStartActivity.remove(this);
+        EventBus.getDefault().unregister(this);//解注册
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             SwipeBackLayout layout = getSwipeBackLayout();
             layout.scrollToFinishActivity();
             return true;
-        }else {
+        } else {
             return super.onKeyDown(keyCode, event);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMessage(Intent intent) {
+
     }
 }

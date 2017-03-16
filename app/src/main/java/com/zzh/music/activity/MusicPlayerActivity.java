@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 
 import com.zzh.music.MusicApplication;
+import com.zzh.music.MusicConstants;
 import com.zzh.music.R;
 import com.zzh.music.base.BaseMusicActivity;
 import com.zzh.music.helper.MusicHelper;
@@ -69,9 +70,9 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
             mMusicService = ((MusicService.MusicBinder) service).getMusicService();
             if (isAutoPlayer && !mMusicService.isPlaying()) {
                 mMusicService.startMusicPlayer();
-                if (mCDView != null)
-                    mCDView.start();
+            } else {
             }
+            mCDView.start();
         }
 
         @Override
@@ -165,7 +166,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
                 mMusicService.nextSongs();
                 break;
             case R.id.btn_player_stop:
-                pauseOrStop();
+                pauseOrStop(true);
                 break;
             case R.id.iv_player_list:
                 showPlayMusicList();
@@ -206,28 +207,35 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         }
     }
 
-    private void pauseOrStop() {
+    /**
+     * 改变播放，暂停按钮的状态
+     *
+     * @param flag 判断，是否操作音乐。false只改变显示状态
+     */
+    private void pauseOrStop(boolean flag) {
         if (mMusicService.isPlaying()) {
             //mStartOrStop.setText("暂停");
-            mStartOrStop.setBackgroundResource(R.mipmap.music_pause_button);
+            mStartOrStop.setBackgroundResource(R.mipmap.music_play_button);
             mCDView.pause();
         } else {
-            //mStartOrStop.setText("开始");
-            mStartOrStop.setBackgroundResource(R.mipmap.music_play_button);
+            mStartOrStop.setBackgroundResource(R.mipmap.music_pause_button);
             mCDView.start();
+            //mStartOrStop.setText("开始");
         }
-        mMusicService.pauseMusicPlayer();
+        if (flag)
+            mMusicService.pauseMusicPlayer();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //解绑服务
-        //unbindService(mServiceConnection);
+        unbindService(mServiceConnection);
     }
 
     /**
      * 设置模糊图片背景
+     *
      * @param src
      */
     public void setBackgroundBlur(Bitmap src) {
@@ -250,4 +258,38 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     public void onItemClicked(int position) {
 
     }
+
+    @Override
+    public void onEventMessage(Intent intent) {
+        if (intent == null || TextUtils.isEmpty(intent.getAction())) {
+            return;
+        }
+        switch (intent.getAction()) {
+            case MusicConstants.EVENT_MUSIC_PLAY_CHANGE_STATUS:
+                //判断循环方式
+                changeMusic();
+
+                break;
+        }
+    }
+
+    private void changeMusic() {
+        switch (mMusicService.getPlayerType()){
+            case ONE_LOOP://播放一次
+                pauseOrStop(false);
+                break;
+            case EACH_LOOP://顺序循环
+                mMusicService.nextSongs();
+                break;
+            case SINGLE_LOOP://单曲循环
+                pauseOrStop(true);
+                break;
+            case RANDOM_LOOP://随机播放
+                mMusicService.randomSongs();
+                break;
+
+        }
+    }
+
+
 }

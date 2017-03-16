@@ -95,7 +95,7 @@
                     android:id="@+id/btn_player_stop"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@mipmap/music_stop_button" />
+                    android:background="@mipmap/music_pause_button" />
 
                 <ImageButton
                     android:id="@+id/btn_next_songs"

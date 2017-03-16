@@ -11,6 +11,7 @@ import com.zzh.music.MusicConstants;
 import com.zzh.music.activity.MusicPlayerActivity;
 import com.zzh.music.helper.MusicHelper;
 import com.zzh.music.model.Music;
+import com.zzh.music.utils.EventUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,17 +78,23 @@ public class MusicService extends Service {
         }
         try {
             String musicUrl = music.getMusicPath();
-            if (TextUtils.isEmpty(musicUrl)){
-                musicUrl = String.format(MusicConstants.URL_NETWORK_MUSIC_PLAY, "baidu.ting.song.play",""+music.getSongId());
+            if (TextUtils.isEmpty(musicUrl)) {
+                musicUrl = String.format(MusicConstants.URL_NETWORK_MUSIC_PLAY, "baidu.ting.song.play", "" + music.getSongId());
             }
             mMediaPlayer.setDataSource(musicUrl);
-            mMediaPlayer.prepareAsync();
             mMediaPlayer.seekTo(0);
-
+            mMediaPlayer.prepareAsync();
+            mMediaPlayer.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(IMediaPlayer iMediaPlayer) {
+                    Log.d(TAG, "onPrepared:----开始播放音乐-----");
+                }
+            });
             mMediaPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(IMediaPlayer iMediaPlayer) {
                     Log.d(TAG, "onCompletion: ---------------------");
+                    EventUtils.sendEventMusicPlayChangeStatus();
                     // 播放完成
                 }
             });
@@ -107,6 +114,18 @@ public class MusicService extends Service {
      * 下一曲
      */
     public void nextSongs() {
+        int i = mCurrentListPlayer.indexOf(mMusic);
+        if (i < (mCurrentListPlayer.size() - 1)) {
+
+        } else {
+            mMusic = mCurrentListPlayer.get(0);
+        }
+    }
+
+    /**
+     * 随机
+     */
+    public void randomSongs() {
 
     }
 
@@ -205,7 +224,7 @@ public class MusicService extends Service {
         return mPlayType;
     }
 
-    public void clearPlayMusicList(){
+    public void clearPlayMusicList() {
         mCurrentListPlayer.clear();
     }
 }
