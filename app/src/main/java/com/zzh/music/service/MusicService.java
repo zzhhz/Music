@@ -72,6 +72,18 @@ public class MusicService extends Service {
         return mIBinder;
     }
 
+    /**
+     * 去重，并添加到播放列表
+     *
+     * @param list
+     */
+    public void appendMusic(List<Music> list) {
+        mCurrentListPlayer.removeAll(list);
+        mCurrentListPlayer.addAll(list);
+    }
+
+
+    //播放准备工作
     public void playMusic(Music music) {
         if (!mCurrentListPlayer.contains(music)) {
             mCurrentListPlayer.add(music);
@@ -80,6 +92,9 @@ public class MusicService extends Service {
             String musicUrl = music.getMusicPath();
             if (TextUtils.isEmpty(musicUrl)) {
                 musicUrl = String.format(MusicConstants.URL_NETWORK_MUSIC_PLAY, "baidu.ting.song.play", "" + music.getSongId());
+            }
+            if (mMediaPlayer != null) {
+                mMediaPlayer.reset();
             }
             mMediaPlayer.setDataSource(musicUrl);
             mMediaPlayer.seekTo(0);
@@ -107,7 +122,13 @@ public class MusicService extends Service {
      * 上一曲
      */
     public void previousSongs() {
-
+        int i = mCurrentListPlayer.indexOf(mMusic);
+        if (i == 0) {
+            mMusic = mCurrentListPlayer.get(mCurrentListPlayer.size() - 1);
+        } else {
+            mMusic = mCurrentListPlayer.get(i - 1);
+        }
+        playMusic(mMusic);
     }
 
     /**
@@ -116,10 +137,11 @@ public class MusicService extends Service {
     public void nextSongs() {
         int i = mCurrentListPlayer.indexOf(mMusic);
         if (i < (mCurrentListPlayer.size() - 1)) {
-
+            mMusic = mCurrentListPlayer.get(i + 1);
         } else {
             mMusic = mCurrentListPlayer.get(0);
         }
+        playMusic(mMusic);
     }
 
     /**

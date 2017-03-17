@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
@@ -31,8 +32,11 @@ import com.zzh.music.widget.CDView;
 import com.zzh.music.widget.LrcView;
 import com.zzh.zlibs.swipe.SwipeBackLayout;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by ZZH on 16/9/28
@@ -45,6 +49,7 @@ import butterknife.ButterKnife;
  */
 public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.OnMenuItemClickListener, PopWindow.OnMusicListClickListener {
     public static final String DATA_MUSIC_PLAYER = "data";
+    public static final String DATA_LIST_MUSIC_PLAYER = "dataList";
     private Music mMusic;
     private MusicService mMusicService;//播放音乐服务的实例
     private CDView mCDView;//转盘文件
@@ -62,6 +67,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     @BindView(R.id.iv_player_type)
     public View mPlayTypeView;
     public PopupWindow mPlayMusicList;
+    public List<Music> mPlayList;
 
 
     ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -73,6 +79,12 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
             } else {
             }
             mCDView.start();
+
+            if (mPlayList != null) {
+                mMusicService.appendMusic(mPlayList);
+            }
+
+            changePlayerType(mMusicService.getPlayerType());
         }
 
         @Override
@@ -93,6 +105,8 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         //toolbars("播放详情");
         Intent intentMusic = getIntent();
         mMusic = (Music) intentMusic.getSerializableExtra(DATA_MUSIC_PLAYER);
+        Bundle bundle = intentMusic.getBundleExtra(DATA_LIST_MUSIC_PLAYER);
+        mPlayList = (List<Music>) bundle.getSerializable(DATA_LIST_MUSIC_PLAYER);
         Bitmap art = MusicLoader.getInstance(this).getMusicArt(mMusic.getId(), mMusic.getMusicAlbumId(), false);
         if (art == null) {
             art = BitmapFactory.decodeResource(getResources(), R.mipmap.menu_header_bg);
@@ -190,6 +204,11 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         mPlayMusicList.showAtLocation(mAllContainer, Gravity.BOTTOM, 0, 0);
     }
 
+    /**
+     * 改变循环按钮的状态。
+     *
+     * @param type 播放模式。
+     */
     private void changePlayerType(MusicHelper.PlayerType type) {
         switch (type) {
             case SINGLE_LOOP:
@@ -208,7 +227,8 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     }
 
     /**
-     * 改变播放，暂停按钮的状态
+     * 改变播放，暂停按钮的状态.
+     * 主动点击播放，暂停按钮时，这个逻辑是可以的。但是播放完成后，按钮图片就改变不过来了。
      *
      * @param flag 判断，是否操作音乐。false只改变显示状态
      */
@@ -268,15 +288,15 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
             case MusicConstants.EVENT_MUSIC_PLAY_CHANGE_STATUS:
                 //判断循环方式
                 changeMusic();
-
                 break;
         }
     }
 
     private void changeMusic() {
-        switch (mMusicService.getPlayerType()){
+        switch (mMusicService.getPlayerType()) {
             case ONE_LOOP://播放一次
                 pauseOrStop(false);
+                switchPlayButton();//手动改变播放按钮状态。
                 break;
             case EACH_LOOP://顺序循环
                 mMusicService.nextSongs();
@@ -287,9 +307,14 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
             case RANDOM_LOOP://随机播放
                 mMusicService.randomSongs();
                 break;
-
         }
     }
 
-
+    private void switchPlayButton() {
+        if (mMusicService.isPlaying()) {
+            mStartOrStop.setBackgroundResource(R.mipmap.music_pause_button);
+        } else {
+            mStartOrStop.setBackgroundResource(R.mipmap.music_play_button);
+        }
+    }
 }

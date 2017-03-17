@@ -20,6 +20,7 @@ import com.zzh.music.loader.ImageLoader;
 import com.zzh.music.model.Music;
 import com.zzh.music.utils.DensityUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class HomeAdapter extends LRecyclerView.Adapter<HomeViewHolder> {
     public HomeAdapter(Context ctx) {
         mContext = ctx;
         dataList = new ArrayList<>();
-        DISPLAY_IMAGE_WIDTH = (DensityUtils.getDisplayWidth(ctx) - DensityUtils.dp2px(ctx, 20)) / 2 ;
+        DISPLAY_IMAGE_WIDTH = (DensityUtils.getDisplayWidth(ctx) - DensityUtils.dp2px(ctx, 20)) / 2;
     }
 
     public void clear() {
@@ -66,21 +67,19 @@ public class HomeAdapter extends LRecyclerView.Adapter<HomeViewHolder> {
     @Override
     public void onBindViewHolder(final HomeViewHolder holder, int position) {
         final Music item = dataList.get(position);
-        holder.musicMsg.setText(item.getMusicDuration()+"");
+        holder.musicMsg.setText(item.getMusicDuration() + "");
         holder.musicTitle.setText(item.getMusicTitle());
-        ImageLoader.getInstance(mContext).loadImageUri(item.getId(),item.getMusicAlbumId(), holder.musicAlbum);
+        ImageLoader.getInstance(mContext).loadImageUri(item.getId(), item.getMusicAlbumId(), holder.musicAlbum);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MusicPlayerActivity.class);
                 intent.putExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER, item);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ){
-                    Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext,
-                            Pair.create((View)holder.musicTitle, "tv_title")).toBundle();
-                    mContext.startActivity(intent, bundle);
-                } else {
-                    mContext.startActivity(intent);
-                }
+//                intent.putExtra(MusicPlayerActivity.DATA_LIST_MUSIC_PLAYER, (ArrayList) dataList);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(MusicPlayerActivity.DATA_LIST_MUSIC_PLAYER, (ArrayList) dataList);
+                intent.putExtra(MusicPlayerActivity.DATA_LIST_MUSIC_PLAYER, bundle);
+                mContext.startActivity(intent);
 
             }
         });
