@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +37,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.OkHttpClient;
 
 /**
  * Created by ZZH on 16/9/28
@@ -76,11 +76,10 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
             mMusicService = ((MusicService.MusicBinder) service).getMusicService();
             if (isAutoPlayer && !mMusicService.isPlaying()) {
                 mMusicService.startMusicPlayer();
-            } else {
             }
             mCDView.start();
 
-            if (mPlayList != null) {
+            if (mPlayList != null) {//网络播放的音乐不传入mPlayList
                 mMusicService.appendMusic(mPlayList);
             }
 
@@ -105,8 +104,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         //toolbars("播放详情");
         Intent intentMusic = getIntent();
         mMusic = (Music) intentMusic.getSerializableExtra(DATA_MUSIC_PLAYER);
-        Bundle bundle = intentMusic.getBundleExtra(DATA_LIST_MUSIC_PLAYER);
-        mPlayList = (List<Music>) bundle.getSerializable(DATA_LIST_MUSIC_PLAYER);
+
         Bitmap art = MusicLoader.getInstance(this).getMusicArt(mMusic.getId(), mMusic.getMusicAlbumId(), false);
         if (art == null) {
             art = BitmapFactory.decodeResource(getResources(), R.mipmap.menu_header_bg);
@@ -129,6 +127,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         });
         mCDView = new CDView(mContext);
 
+        Log.d(TAG, "--Play Music--: "+mMusic);
         int width = MusicApplication.DISPLAY_WIDTH * 3 / 5;
         mCDView.setWidthAndHeight(width, width);
         mCDView.setImage(art);
@@ -137,6 +136,12 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
 
     @Override
     protected void initData() {
+        //
+        Intent intentMusic = getIntent();
+        if (intentMusic.hasExtra(DATA_LIST_MUSIC_PLAYER)) {
+            Bundle bundle = intentMusic.getBundleExtra(DATA_LIST_MUSIC_PLAYER);
+            mPlayList = (List<Music>) bundle.getSerializable(DATA_LIST_MUSIC_PLAYER);
+        }
         //启动音乐播放服务
         Intent intent = new Intent(mContext, MusicService.class);
         intent.putExtra("data", mMusic);

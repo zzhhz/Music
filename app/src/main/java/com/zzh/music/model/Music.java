@@ -605,7 +605,68 @@ public class Music implements Serializable {
         this.artistName = artistName;
     }
 
-    public enum MUSIC_MODEL {
-        SINGLE_LOOP/*单曲循环*/, EACH_LOOP/*一次循环*/, RANDOM_LOOP/*随机播放*/, ONE_LOOP/*播放一次*/
+    @Override
+    public String toString() {
+        return "Music{" +
+                "type=" + type +
+                ", id=" + id +
+                ", musicSize=" + musicSize +
+                ", musicName='" + musicName + '\'' +
+                ", musicUrl='" + musicUrl + '\'' +
+                ", musicPath='" + musicPath + '\'' +
+                ", musicDesc='" + musicDesc + '\'' +
+                ", musicTag='" + musicTag + '\'' +
+                ", musicArtist='" + musicArtist + '\'' +
+                ", musicDuration=" + musicDuration +
+                ", musicAlbum='" + musicAlbum + '\'' +
+                ", musicAlbumId=" + musicAlbumId +
+                ", musicTitle='" + musicTitle + '\'' +
+                ", mBitmapAlbum=" + mBitmapAlbum +
+                ", width=" + width +
+                ", height=" + height +
+                ", artistId='" + artistId + '\'' +
+                ", language='" + language + '\'' +
+                ", picBig='" + picBig + '\'' +
+                ", picSmall='" + picSmall + '\'' +
+                ", country='" + country + '\'' +
+                ", area='" + area + '\'' +
+                ", publishtime='" + publishtime + '\'' +
+                ", albumNo='" + albumNo + '\'' +
+                ", lrclink='" + lrclink + '\'' +
+                ", copyType='" + copyType + '\'' +
+                ", hot='" + hot + '\'' +
+                ", allArtistTingUid='" + allArtistTingUid + '\'' +
+                ", resourceType='" + resourceType + '\'' +
+                ", isNew='" + isNew + '\'' +
+                ", rankChange='" + rankChange + '\'' +
+                ", rank='" + rank + '\'' +
+                ", allArtistId='" + allArtistId + '\'' +
+                ", style='" + style + '\'' +
+                ", delStatus='" + delStatus + '\'' +
+                ", relateStatus='" + relateStatus + '\'' +
+                ", toneid='" + toneid + '\'' +
+                ", allRate='" + allRate + '\'' +
+                ", fileDuration='" + fileDuration + '\'' +
+                ", hasMvMobile='" + hasMvMobile + '\'' +
+                ", versions='" + versions + '\'' +
+                ", bitrateFee='" + bitrateFee + '\'' +
+                ", songId='" + songId + '\'' +
+                ", title='" + title + '\'' +
+                ", tingUid='" + tingUid + '\'' +
+                ", author='" + author + '\'' +
+                ", albumId='" + albumId + '\'' +
+                ", albumTitle='" + albumTitle + '\'' +
+                ", isFirstPublish='" + isFirstPublish + '\'' +
+                ", havehigh='" + havehigh + '\'' +
+                ", charge='" + charge + '\'' +
+                ", hasMv='" + hasMv + '\'' +
+                ", learn='" + learn + '\'' +
+                ", songSource='" + songSource + '\'' +
+                ", piaoId='" + piaoId + '\'' +
+                ", koreanBbSong='" + koreanBbSong + '\'' +
+                ", resourceTypExt='" + resourceTypExt + '\'' +
+                ", mvProvider='" + mvProvider + '\'' +
+                ", artistName='" + artistName + '\'' +
+                '}';
     }
 }
