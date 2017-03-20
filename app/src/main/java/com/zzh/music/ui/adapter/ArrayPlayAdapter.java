@@ -51,8 +51,8 @@ public class ArrayPlayAdapter extends ArrayAdapter<Music> {
             holder = (ViewHolder) convertView.getTag();
         }
         Music music = mDataList.get(position);
-        holder.musicName.setText(TextUtils.isEmpty(music.getMusicName()) ? music.getTitle() : music.getMusicName());
-        holder.musicAuthor.setText(TextUtils.isEmpty(music.getMusicArtist()) ? music.getAuthor() : music.getMusicArtist());
+        holder.musicName.setText(music.getMusicName());
+        holder.musicAuthor.setText(music.getMusicArtist());
         return convertView;
     }
 

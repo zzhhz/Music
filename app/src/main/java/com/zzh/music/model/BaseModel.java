@@ -18,10 +18,12 @@ public class BaseModel<T> {
     private String msg;
     @SerializedName(value = "song_list", alternate = {"contents"})
     private List<T> contents;
+    @SerializedName(value = "content", alternate = {"songinfo"})
     private T content;
     @SerializedName(value = "error_code")
     private String errorCode;
     private Billboard billboard;
+    private Bitrate bitrate;
 
     public String getStatus() {
         return status;
@@ -69,5 +71,13 @@ public class BaseModel<T> {
 
     public void setErrorCode(String errorCode) {
         this.errorCode = errorCode;
+    }
+
+    public Bitrate getBitrate() {
+        return bitrate;
+    }
+
+    public void setBitrate(Bitrate bitrate) {
+        this.bitrate = bitrate;
     }
 }

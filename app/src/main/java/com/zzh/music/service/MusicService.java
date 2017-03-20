@@ -85,13 +85,16 @@ public class MusicService extends Service {
 
     //播放准备工作
     public void playMusic(Music music) {
+        if (music == null){
+            return;
+        }
         if (!mCurrentListPlayer.contains(music)) {
             mCurrentListPlayer.add(music);
         }
         try {
             String musicUrl = music.getMusicPath();
             if (TextUtils.isEmpty(musicUrl)) {
-                musicUrl = String.format(MusicConstants.URL_NETWORK_MUSIC_PLAY, "baidu.ting.song.play", "" + music.getSongId());
+                musicUrl = String.format(MusicConstants.URL_NETWORK_MUSIC_PLAY, "baidu.ting.song.play", "");
             }
             if (mMediaPlayer != null) {
                 mMediaPlayer.reset();

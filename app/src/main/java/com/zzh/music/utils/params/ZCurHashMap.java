@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ZCurHashMap extends ConcurrentHashMap<String,String> {
     public static final String FORMAT = "format";
-    public static final String CALBACK = "calback";
+    public static final String CALLBACK = "callback";
     public static final String FROM = "from";
     public static final String METHOD = "method";
     public static final String TYPE = "type";
@@ -41,7 +41,7 @@ public class ZCurHashMap extends ConcurrentHashMap<String,String> {
 
     public ZCurHashMap() {
         put(FORMAT, "json");
-        put(CALBACK,"");
+        put(CALLBACK,"");
         put(FROM,"webapp_music");
         put(SIZE,"10");
         put(OFF_SET,"0");

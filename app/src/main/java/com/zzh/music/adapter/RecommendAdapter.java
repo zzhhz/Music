@@ -10,11 +10,14 @@ import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.zzh.music.R;
 import com.zzh.music.activity.MusicPlayerActivity;
 import com.zzh.music.holder.RecommendViewHolder;
-import com.zzh.music.model.Music;
+import com.zzh.music.model.Album;
 import com.zzh.music.utils.web.GlideUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.zzh.music.activity.MusicPlayerActivity.DATA_TYPE_ALBUM;
+import static com.zzh.music.activity.MusicPlayerActivity.DATA_TYPE_PLAYER;
 
 /**
  * Created by ZZH on 16/6/22.
@@ -27,7 +30,7 @@ import java.util.List;
  */
 public class RecommendAdapter extends LRecyclerView.Adapter<RecommendViewHolder> {
     private final Context mContext;
-    private List<Music> dataList;
+    private List<Album> dataList;
 
     public RecommendAdapter(Context ctx) {
         mContext = ctx;
@@ -38,11 +41,11 @@ public class RecommendAdapter extends LRecyclerView.Adapter<RecommendViewHolder>
         dataList.clear();
     }
 
-    public void add(Music item) {
+    public void add(Album item) {
         dataList.add(item);
     }
 
-    public void addAll(List<Music> list) {
+    public void addAll(List<Album> list) {
         dataList.addAll(list);
     }
 
@@ -54,7 +57,8 @@ public class RecommendAdapter extends LRecyclerView.Adapter<RecommendViewHolder>
 
     @Override
     public void onBindViewHolder(RecommendViewHolder holder, int position) {
-        final Music item = dataList.get(position);GlideUtils.loadImageIntoView(mContext, item.getPicBig(), holder.musicImage);
+        final Album item = dataList.get(position);
+        GlideUtils.loadImageIntoView(mContext, item.getPicBig(), holder.musicImage);
 
         holder.musicAutor.setText(item.getAuthor());
         holder.musicTitle.setText(item.getTitle());
@@ -62,7 +66,8 @@ public class RecommendAdapter extends LRecyclerView.Adapter<RecommendViewHolder>
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MusicPlayerActivity.class);
-                intent.putExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER, item);
+                intent.putExtra(DATA_TYPE_PLAYER, DATA_TYPE_ALBUM);
+                intent.putExtra(MusicPlayerActivity.DATA_ALBUM_PLAYER, item);
                 mContext.startActivity(intent);
             }
         });

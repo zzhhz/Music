@@ -1,6 +1,7 @@
 package com.zzh.music.utils.web;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -10,6 +11,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.zzh.music.MusicApplication;
+import com.zzh.music.MusicConstants;
 import com.zzh.music.R;
 
 /**
@@ -32,7 +34,7 @@ public class GlideUtils {
      */
     public static void loadImageIntoView(Context ctx, String imgUrl, final ImageView iv) {
         Glide.with(ctx).load(imgUrl).placeholder(R.color.color_accent)
-                .crossFade().error(R.mipmap.ic_launcher).fitCenter()
+                .crossFade().error(MusicConstants.DEFAULT_MUSIC_IMAGE).fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(new SimpleTarget<GlideDrawable>() {
                     @Override
@@ -45,6 +47,16 @@ public class GlideUtils {
                         iv.setImageDrawable(resource);
                     }
                 });
+    }
+
+    /**
+     * 加载图片成bitmap形式
+     * @param ctx
+     * @param imgUrl
+     */
+    public static void loadImageBitmap(Context ctx,String imgUrl, SimpleTarget<Bitmap> st){
+        Glide.with(ctx).load(imgUrl).asBitmap().error(MusicConstants.DEFAULT_MUSIC_IMAGE).diskCacheStrategy(
+                DiskCacheStrategy.ALL).into(st);
     }
 }
 

@@ -19,24 +19,36 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.zzh.music.MusicApplication;
 import com.zzh.music.MusicConstants;
 import com.zzh.music.R;
 import com.zzh.music.base.BaseMusicActivity;
 import com.zzh.music.helper.MusicHelper;
+import com.zzh.music.model.Album;
+import com.zzh.music.model.BaseModel;
 import com.zzh.music.model.Music;
+import com.zzh.music.model.Song;
 import com.zzh.music.service.MusicService;
 import com.zzh.music.ui.view.PopWindow;
 import com.zzh.music.ui.view.RelativeLayoutBlurredView;
 import com.zzh.music.utils.MusicLoader;
+import com.zzh.music.utils.params.ZCurHashMap;
+import com.zzh.music.utils.web.BaseSubscriber;
+import com.zzh.music.utils.web.GlideUtils;
+import com.zzh.music.utils.web.RetrofitUtils;
 import com.zzh.music.widget.CDView;
 import com.zzh.music.widget.LrcView;
 import com.zzh.zlibs.swipe.SwipeBackLayout;
 
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by ZZH on 16/9/28
@@ -48,9 +60,15 @@ import butterknife.ButterKnife;
  * @Description: 音乐详情的界面, 单独拿出一个activity, 用来展示播放音乐播放界面。
  */
 public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.OnMenuItemClickListener, PopWindow.OnMusicListClickListener {
-    public static final String DATA_MUSIC_PLAYER = "data";
+    public static final String DATA_MUSIC_PLAYER = "data_music";
+    public static final String DATA_ALBUM_PLAYER = "data_album";
+    public static final String DATA_TYPE_PLAYER = "data_type";
+    public static final int DATA_TYPE_MUSIC = 0;
+    public static final int DATA_TYPE_ALBUM = 1;
+    public int playType = 0;
     public static final String DATA_LIST_MUSIC_PLAYER = "dataList";
-    private Music mMusic;
+    private Music mMusic; //播放的音乐
+    private Album mAlbum;//
     private MusicService mMusicService;//播放音乐服务的实例
     private CDView mCDView;//转盘文件
     private LrcView mLrcView;// 歌词显示
@@ -103,14 +121,27 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         ButterKnife.bind(this);
         //toolbars("播放详情");
         Intent intentMusic = getIntent();
-        mMusic = (Music) intentMusic.getSerializableExtra(DATA_MUSIC_PLAYER);
-
-        Bitmap art = MusicLoader.getInstance(this).getMusicArt(mMusic.getId(), mMusic.getMusicAlbumId(), false);
+        playType = intentMusic.getIntExtra(DATA_TYPE_PLAYER, 0);
+        if (playType == DATA_TYPE_MUSIC) {//本地音乐
+            mMusic = (Music) intentMusic.getSerializableExtra(DATA_MUSIC_PLAYER);
+        } else {//网络专辑
+            mAlbum = (Album) intentMusic.getSerializableExtra(DATA_ALBUM_PLAYER);
+            loadMusic();
+        }
+        Bundle bundle = intentMusic.getBundleExtra(DATA_LIST_MUSIC_PLAYER);
+        if (bundle != null && bundle.containsKey(DATA_LIST_MUSIC_PLAYER))
+            mPlayList = (List<Music>) bundle.getSerializable(DATA_LIST_MUSIC_PLAYER);
+        Bitmap art = null;
+        String title = null;
+        if (mMusic != null) {
+            title = mMusic.getMusicName();
+            MusicLoader.getInstance(this).getMusicArt(mMusic.getId(), mMusic.getMusicAlbumId(), false);
+        }
         if (art == null) {
             art = BitmapFactory.decodeResource(getResources(), R.mipmap.menu_header_bg);
         }
         setBackgroundBlur(art);
-        String title = mMusic.getMusicName();
+
         if (TextUtils.isEmpty(title)) {
             title = "正在播放";
         } else {
@@ -127,11 +158,54 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         });
         mCDView = new CDView(mContext);
 
-        Log.d(TAG, "--Play Music--: "+mMusic);
+        Log.d(TAG, "--Play Music--: " + mMusic);
         int width = MusicApplication.DISPLAY_WIDTH * 3 / 5;
         mCDView.setWidthAndHeight(width, width);
         mCDView.setImage(art);
         mPlayerContainer.addView(mCDView);
+    }
+
+    /**
+     * 加载网络音乐详情
+     */
+    private void loadMusic() {
+        Map<String, String> params = new ZCurHashMap();
+        params.put("method", "baidu.ting.song.play");
+        params.put("songid", mAlbum.getSongId());
+        params.put(ZCurHashMap.FROM,"Android");
+        RetrofitUtils.Api().getMusicInfo(params).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<BaseModel<Song>>(this) {
+            @Override
+            public void onNext(BaseModel<Song> baseModel) {
+                mMusic = new Music();
+
+                if ("22000".equals(baseModel.getErrorCode())) {
+                    mMusic.setMusicPath(baseModel.getBitrate().getFileLink());
+                    mMusic.setMusicName(baseModel.getContent().getTitle());
+                    mMusic.setMusicArtist(baseModel.getContent().getAuthor());
+                    mMusic.setMusicTitle(baseModel.getContent().getAlbumTitle());
+                    mMusic.setMusicUrl(baseModel.getContent().getPicBig());
+                    mMusic.setMusicDuration(baseModel.getBitrate().getFileDuration());
+                    mMusic.setMusicLrcUrl(baseModel.getContent().getLrclink());
+                    GlideUtils.loadImageBitmap(mContext, mMusic.getMusicUrl(), new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            if (resource != null) {
+                                setBackgroundBlur(resource);
+                                mCDView.setImage(resource);
+                            }
+                        }
+                    });
+                    mMusicService.playMusic(mMusic);
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError: "+e.getMessage());
+            }
+        });
     }
 
     @Override

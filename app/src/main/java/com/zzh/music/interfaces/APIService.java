@@ -1,7 +1,9 @@
 package com.zzh.music.interfaces;
 
+import com.zzh.music.model.Album;
 import com.zzh.music.model.BaseModel;
 import com.zzh.music.model.Music;
+import com.zzh.music.model.Song;
 
 import java.util.Map;
 
@@ -32,7 +34,9 @@ public interface APIService {
     @GET("v1/restserver/ting")
     Observable<ResponseBody> testApi(@QueryMap Map<String, String> params);
     @POST("/v1/restserver/ting")
-    Observable<BaseModel<Music>> getRecommendType(@QueryMap Map<String, String> params);
+    Observable<BaseModel<Album>> getRecommendType(@QueryMap Map<String, String> params);
+    @POST("/v1/restserver/ting")//音乐详情
+    Observable<BaseModel<Song>> getMusicInfo(@QueryMap Map<String, String> params);
 
 
 

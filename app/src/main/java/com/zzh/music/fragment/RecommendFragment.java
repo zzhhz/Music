@@ -12,6 +12,7 @@ import com.zzh.libs.widget.ZRecyclerView;
 import com.zzh.music.R;
 import com.zzh.music.adapter.RecommendAdapter;
 import com.zzh.music.base.BaseFragment;
+import com.zzh.music.model.Album;
 import com.zzh.music.model.BaseModel;
 import com.zzh.music.model.Music;
 import com.zzh.music.utils.params.ZCurHashMap;
@@ -101,13 +102,13 @@ public class RecommendFragment extends BaseFragment {
         params.put("size", "10");
         params.put("offset", RetrofitUtils.nextPage(page));
         RetrofitUtils.Api().getRecommendType(params).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<BaseModel<Music>>(getActivity()) {
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<BaseModel<Album>>(getActivity()) {
             @Override
-            public void onNext(BaseModel<Music> baseModel) {
+            public void onNext(BaseModel<Album> baseModel) {
                 if (page == 0) {
                     mAdapter.clear();
                 }
-                List<Music> musicList = baseModel.getContents();
+                List<Album> musicList = baseModel.getContents();
                 mAdapter.addAll(musicList);
                 mViewAdapter.notifyDataSetChanged();
                 mRecommend.refreshComplete(10);
