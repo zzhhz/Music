@@ -2,7 +2,6 @@ package com.zzh.music.interfaces;
 
 import com.zzh.music.model.Album;
 import com.zzh.music.model.BaseModel;
-import com.zzh.music.model.Music;
 import com.zzh.music.model.Song;
 
 import java.util.Map;
@@ -12,6 +11,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import rx.Observable;
 
@@ -37,6 +37,8 @@ public interface APIService {
     Observable<BaseModel<Album>> getRecommendType(@QueryMap Map<String, String> params);
     @POST("/v1/restserver/ting")//音乐详情
     Observable<BaseModel<Song>> getMusicInfo(@QueryMap Map<String, String> params);
+    @GET("/v1/restserver/ting?method=baidu.ting.song.play&from=android&format=json")//音乐详情
+    Observable<BaseModel<Song>> getSongsInfo(@Query("songid") String songId);
 
 
 

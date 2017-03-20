@@ -34,7 +34,6 @@ import com.zzh.music.service.MusicService;
 import com.zzh.music.ui.view.PopWindow;
 import com.zzh.music.ui.view.RelativeLayoutBlurredView;
 import com.zzh.music.utils.MusicLoader;
-import com.zzh.music.utils.params.ZCurHashMap;
 import com.zzh.music.utils.web.BaseSubscriber;
 import com.zzh.music.utils.web.GlideUtils;
 import com.zzh.music.utils.web.RetrofitUtils;
@@ -43,7 +42,6 @@ import com.zzh.music.widget.LrcView;
 import com.zzh.zlibs.swipe.SwipeBackLayout;
 
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -169,25 +167,20 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
      * 加载网络音乐详情
      */
     private void loadMusic() {
-        Map<String, String> params = new ZCurHashMap();
-        params.put("method", "baidu.ting.song.play");
-        params.put("songid", mAlbum.getSongId());
-        params.put(ZCurHashMap.FROM,"Android");
-        RetrofitUtils.Api().getMusicInfo(params).subscribeOn(Schedulers.io())
+        RetrofitUtils.Api().getSongsInfo(mAlbum.getSongId()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<BaseModel<Song>>(this) {
             @Override
             public void onNext(BaseModel<Song> baseModel) {
-                mMusic = new Music();
-
                 if ("22000".equals(baseModel.getErrorCode())) {
-                    mMusic.setMusicPath(baseModel.getBitrate().getFileLink());
-                    mMusic.setMusicName(baseModel.getContent().getTitle());
-                    mMusic.setMusicArtist(baseModel.getContent().getAuthor());
-                    mMusic.setMusicTitle(baseModel.getContent().getAlbumTitle());
-                    mMusic.setMusicUrl(baseModel.getContent().getPicBig());
-                    mMusic.setMusicDuration(baseModel.getBitrate().getFileDuration());
-                    mMusic.setMusicLrcUrl(baseModel.getContent().getLrclink());
-                    GlideUtils.loadImageBitmap(mContext, mMusic.getMusicUrl(), new SimpleTarget<Bitmap>() {
+                    Music music = new Music();
+                    music.setMusicPath(baseModel.getBitrate().getFileLink());
+                    music.setMusicName(baseModel.getContent().getTitle());
+                    music.setMusicArtist(baseModel.getContent().getAuthor());
+                    music.setMusicTitle(baseModel.getContent().getAlbumTitle());
+                    music.setMusicUrl(baseModel.getContent().getPicBig());
+                    music.setMusicDuration(baseModel.getBitrate().getFileDuration());
+                    music.setMusicLrcUrl(baseModel.getContent().getLrclink());
+                    GlideUtils.loadImageBitmap(mContext, music.getMusicUrl(), new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                             if (resource != null) {
@@ -196,7 +189,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
                             }
                         }
                     });
-                    mMusicService.playMusic(mMusic);
+                    mMusicService.playMusic(music);
                 }
 
             }
@@ -218,7 +211,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         }
         //启动音乐播放服务
         Intent intent = new Intent(mContext, MusicService.class);
-        intent.putExtra("data", mMusic);
+        intent.putExtra(DATA_MUSIC_PLAYER, mMusic);
         bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 

@@ -1,13 +1,9 @@
 package com.zzh.music.adapter;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +16,6 @@ import com.zzh.music.loader.ImageLoader;
 import com.zzh.music.model.Music;
 import com.zzh.music.utils.DensityUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +69,7 @@ public class HomeAdapter extends LRecyclerView.Adapter<HomeViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, MusicPlayerActivity.class);
+                intent.putExtra(MusicPlayerActivity.DATA_TYPE_PLAYER, MusicPlayerActivity.DATA_MUSIC_PLAYER);
                 intent.putExtra(MusicPlayerActivity.DATA_MUSIC_PLAYER, item);
 //                intent.putExtra(MusicPlayerActivity.DATA_LIST_MUSIC_PLAYER, (ArrayList) dataList);
                 Bundle bundle = new Bundle();

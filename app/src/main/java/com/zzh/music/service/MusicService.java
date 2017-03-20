@@ -88,6 +88,7 @@ public class MusicService extends Service {
         if (music == null){
             return;
         }
+        mMusic = music;
         if (!mCurrentListPlayer.contains(music)) {
             mCurrentListPlayer.add(music);
         }

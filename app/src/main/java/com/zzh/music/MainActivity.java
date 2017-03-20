@@ -2,12 +2,9 @@ package com.zzh.music;
 
 import android.animation.Animator;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Message;
-import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
@@ -32,9 +29,6 @@ import com.zzh.music.fragment.HomeFragment;
 import com.zzh.music.fragment.RecommendFragment;
 import com.zzh.music.utils.ColorUtils;
 import com.zzh.music.widget.ZZHDialog;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends BaseMusicNoSwipeActivity implements ViewPager.OnPageChangeListener{
     private TabLayout mTabLayout;
@@ -135,40 +129,42 @@ public class MainActivity extends BaseMusicNoSwipeActivity implements ViewPager.
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                float x = 0;
-                float y = 0;
-                appBarLayout.setBackgroundColor(mAppBarLayoutBgColor);
-                final int width = mTabLayout.getWidth();
-                final int height = mTabLayout.getHeight();
-                final double radio = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
-                Animator circularReveal = ViewAnimationUtils.createCircularReveal(appBarLayout,
-                        (int) x,
-                        (int) y, 0, (float) radio);
-                circularReveal.setInterpolator(new AccelerateInterpolator());
-                circularReveal.setDuration(375);
-                circularReveal.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        mAppBarLayoutBgColor = Color.parseColor(ColorUtils.random());
-                        appBarLayout.setBackgroundColor(mAppBarLayoutBgColor);
-                    }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                    float x = 0;
+                    float y = 0;
+                    appBarLayout.setBackgroundColor(mAppBarLayoutBgColor);
+                    final int width = mTabLayout.getWidth();
+                    final int height = mTabLayout.getHeight();
+                    final double radio = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
+                    Animator circularReveal = ViewAnimationUtils.createCircularReveal(appBarLayout,
+                            (int) x,
+                            (int) y, 0, (float) radio);
+                    circularReveal.setInterpolator(new AccelerateInterpolator());
+                    circularReveal.setDuration(375);
+                    circularReveal.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            mAppBarLayoutBgColor = Color.parseColor(ColorUtils.random());
+                            appBarLayout.setBackgroundColor(mAppBarLayoutBgColor);
+                        }
 
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        appBarLayout.setDrawingCacheBackgroundColor(mAppBarLayoutBgColor);
-                    }
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            appBarLayout.setDrawingCacheBackgroundColor(mAppBarLayoutBgColor);
+                        }
 
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
 
-                    }
-                });
-                circularReveal.start();
+                        }
+                    });
+                    circularReveal.start();
+                }
             }
 
             @Override
