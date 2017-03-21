@@ -140,7 +140,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         if (art == null) {
             art = BitmapFactory.decodeResource(getResources(), R.mipmap.menu_header_bg);
         }
-        setBackgroundBlur(art);
+        //setBackgroundBlur(art);
 
         if (TextUtils.isEmpty(title)) {
             title = "正在播放";

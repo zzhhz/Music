@@ -82,7 +82,7 @@ public class RelativeLayoutBlurredView extends RelativeLayout {
     /**
      * 是否移动背景图片
      */
-    private boolean isMove;
+    private boolean isMove = false;
 
     public RelativeLayoutBlurredView(Context context) {
         super(context);
