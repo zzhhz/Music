@@ -61,6 +61,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     public static final String DATA_MUSIC_PLAYER = "data_music";
     public static final String DATA_ALBUM_PLAYER = "data_album";
     public static final String DATA_TYPE_PLAYER = "data_type";
+    public static final String DATA_IS_AUTO_PLAYER = "auto_play";
     public static final int DATA_TYPE_MUSIC = 0;
     public static final int DATA_TYPE_ALBUM = 1;
     public int playType = 0;
@@ -91,7 +92,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         public void onServiceConnected(ComponentName name, IBinder service) {
             mMusicService = ((MusicService.MusicBinder) service).getMusicService();
             if (isAutoPlayer && !mMusicService.isPlaying()) {
-                mMusicService.startMusicPlayer();
+                mMusicService.playMusic(mMusic);
             }
             mCDView.start();
 
@@ -120,6 +121,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         //toolbars("播放详情");
         Intent intentMusic = getIntent();
         playType = intentMusic.getIntExtra(DATA_TYPE_PLAYER, 0);
+        isAutoPlayer = intentMusic.getBooleanExtra(DATA_IS_AUTO_PLAYER, false);
         if (playType == DATA_TYPE_MUSIC) {//本地音乐
             mMusic = (Music) intentMusic.getSerializableExtra(DATA_MUSIC_PLAYER);
         } else {//网络专辑
@@ -172,15 +174,15 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
             @Override
             public void onNext(BaseModel<Song> baseModel) {
                 if ("22000".equals(baseModel.getErrorCode())) {
-                    Music music = new Music();
-                    music.setMusicPath(baseModel.getBitrate().getFileLink());
-                    music.setMusicName(baseModel.getContent().getTitle());
-                    music.setMusicArtist(baseModel.getContent().getAuthor());
-                    music.setMusicTitle(baseModel.getContent().getAlbumTitle());
-                    music.setMusicUrl(baseModel.getContent().getPicBig());
-                    music.setMusicDuration(baseModel.getBitrate().getFileDuration());
-                    music.setMusicLrcUrl(baseModel.getContent().getLrclink());
-                    GlideUtils.loadImageBitmap(mContext, music.getMusicUrl(), new SimpleTarget<Bitmap>() {
+                    mMusic = new Music();
+                    mMusic.setMusicPath(baseModel.getBitrate().getFileLink());
+                    mMusic.setMusicName(baseModel.getContent().getTitle());
+                    mMusic.setMusicArtist(baseModel.getContent().getAuthor());
+                    mMusic.setMusicTitle(baseModel.getContent().getAlbumTitle());
+                    mMusic.setMusicUrl(baseModel.getContent().getPicBig());
+                    mMusic.setMusicDuration(baseModel.getBitrate().getFileDuration());
+                    mMusic.setMusicLrcUrl(baseModel.getContent().getLrclink());
+                    GlideUtils.loadImageBitmap(mContext, mMusic.getMusicUrl(), new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                             if (resource != null) {
@@ -189,14 +191,16 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
                             }
                         }
                     });
-                    mMusicService.playMusic(music);
+                    if (mMusicService != null) {
+                        mMusicService.playMusic(mMusic);
+                    }
                 }
 
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d(TAG, "onError: "+e.getMessage());
+                Log.d(TAG, "onError: " + e.getMessage());
             }
         });
     }
@@ -333,7 +337,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     public void setBackgroundBlur(Bitmap src) {
         mAllContainer.enableBlurredView();
         mAllContainer.setBlurredImg(src);
-        mAllContainer.setBlurredLevel(90);
+        mAllContainer.setBlurredLevel(95);
     }
 
     @Override

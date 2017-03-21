@@ -68,6 +68,7 @@ public class RecommendAdapter extends LRecyclerView.Adapter<RecommendViewHolder>
                 Intent intent = new Intent(mContext, MusicPlayerActivity.class);
                 intent.putExtra(DATA_TYPE_PLAYER, DATA_TYPE_ALBUM);
                 intent.putExtra(MusicPlayerActivity.DATA_ALBUM_PLAYER, item);
+                intent.putExtra(MusicPlayerActivity.DATA_IS_AUTO_PLAYER, true);
                 mContext.startActivity(intent);
             }
         });
