@@ -21,6 +21,7 @@ import android.widget.PopupWindow;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.common.base.Strings;
 import com.zzh.music.MusicApplication;
 import com.zzh.music.MusicConstants;
 import com.zzh.music.R;
@@ -31,8 +32,10 @@ import com.zzh.music.model.BaseModel;
 import com.zzh.music.model.Music;
 import com.zzh.music.model.Song;
 import com.zzh.music.service.MusicService;
+import com.zzh.music.task.DownLoadTask;
 import com.zzh.music.ui.view.PopWindow;
 import com.zzh.music.ui.view.RelativeLayoutBlurredView;
+import com.zzh.music.utils.BlurredBitmapUtil;
 import com.zzh.music.utils.MusicLoader;
 import com.zzh.music.utils.web.BaseSubscriber;
 import com.zzh.music.utils.web.GlideUtils;
@@ -64,6 +67,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     public static final String DATA_IS_AUTO_PLAYER = "auto_play";
     public static final int DATA_TYPE_MUSIC = 0;
     public static final int DATA_TYPE_ALBUM = 1;
+    public static final int SET_BACKGROUND = 0X110;
     public int playType = 0;
     public static final String DATA_LIST_MUSIC_PLAYER = "dataList";
     private Music mMusic; //播放的音乐
@@ -135,13 +139,13 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         String title = null;
         if (mMusic != null) {
             title = mMusic.getMusicName();
-            MusicLoader.getInstance(this).getMusicArt(mMusic.getId(), mMusic.getMusicAlbumId(), false);
+            art = MusicLoader.getInstance(this).getMusicArt(mMusic.getId(), mMusic.getMusicAlbumId(), false);
         }
-        if (art == null) {
+        if (art != null) { // 不为空的时候设置背景
+            setBackgroundBlur(art);
+        } else {
             art = BitmapFactory.decodeResource(getResources(), R.mipmap.menu_header_bg);
         }
-        //setBackgroundBlur(art);
-
         if (TextUtils.isEmpty(title)) {
             title = "正在播放";
         } else {
@@ -184,13 +188,27 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
                     mMusic.setMusicLrcUrl(baseModel.getContent().getLrclink());
                     GlideUtils.loadImageBitmap(mContext, mMusic.getMusicUrl(), new SimpleTarget<Bitmap>() {
                         @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        public void onResourceReady(final Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                             if (resource != null) {
-                                setBackgroundBlur(resource);
                                 mCDView.setImage(resource);
+                                new Thread() {
+                                    @Override
+                                    public void run() {
+                                        super.run();
+                                        Bitmap bitmap = BlurredBitmapUtil.fastblur(mContext, resource, 10);
+                                        Message message = mHandler.obtainMessage();
+                                        message.obj = bitmap;
+                                        message.what = SET_BACKGROUND;
+                                        mHandler.sendMessage(message);
+                                    }
+                                }.start();
+
                             }
                         }
                     });
+
+                    //DownLoadTask.getInstance().start(mMusic.getMusicPath(), );
+
                     if (mMusicService != null) {
                         mMusicService.playMusic(mMusic);
                     }
@@ -234,6 +252,10 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
         switch (msg.what) {
             case AUTO_PLAYER:
 
+                break;
+            case SET_BACKGROUND:
+                Bitmap obj = (Bitmap) msg.obj;
+                setBackgroundBlur(obj);
                 break;
         }
 
@@ -337,7 +359,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
     public void setBackgroundBlur(Bitmap src) {
         mAllContainer.enableBlurredView();
         mAllContainer.setBlurredImg(src);
-        mAllContainer.setBlurredLevel(95);
+        //mAllContainer.setBlurredLevel(95);
     }
 
     @Override
