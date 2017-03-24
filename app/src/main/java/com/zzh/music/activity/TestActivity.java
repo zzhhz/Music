@@ -2,11 +2,15 @@ package com.zzh.music.activity;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Message;
 import android.view.View;
 
 import com.zzh.music.R;
 import com.zzh.music.base.BaseMusicActivity;
+import com.zzh.zlibs.utils.ZUtils;
+
+import java.io.File;
 
 public class TestActivity extends BaseMusicActivity {
 
@@ -33,6 +37,7 @@ public class TestActivity extends BaseMusicActivity {
     @Override
     protected void initSetListener() {
 
+        findViewById(R.id.button).setOnClickListener(this);
     }
 
     @Override
@@ -49,6 +54,11 @@ public class TestActivity extends BaseMusicActivity {
 
     @Override
     public void onClick(View v) {
+        requestReadStoragePermission();
+    }
 
+    @Override
+    protected void notifyPermission(int code, boolean flag) {
+        showMessage(ZUtils.getSDCardDirectory(Environment.DIRECTORY_MUSIC) + File.separator + "537792141.mp3");
     }
 }
