@@ -118,6 +118,10 @@ public class DownLoadTask {
     }
 
     private void getFiles(String save2Path, String fileUrl) {
+        getFiles(save2Path, fileUrl, null);
+    }
+
+    private void getFiles(String save2Path, String fileUrl, OnDownLoadListener listener) {
         File localFile = new File(save2Path);
         FileOutputStream fos = null; //写文件
         InputStream in = null;//获取输入流
@@ -152,21 +156,34 @@ public class DownLoadTask {
                         }
                         localFile.createNewFile();
                     }
-
                     fos = new FileOutputStream(localFile);
                     byte buf[] = new byte[1024 * 4];
                     int len = -1;
+                    int length = 0;
                     while ((len = in.read(buf)) != -1) {
+                        length = len + length;
+                        if (listener != null) {
+                            listener.onLength(length * 100 / fileSize);
+                        }
                         fos.write(buf, 0, len);
                     }
                     fos.flush();
+                    if (listener != null) {
+                        listener.onSuccess(save2Path);
+                    }
                 }
             }
         } catch (MalformedURLException e) {
             Log.d(TAG, "run: URL failed ");
+            if (listener != null) {
+                listener.onFailed("URL failed ");
+            }
             e.printStackTrace();
         } catch (IOException e) {
             Log.d(TAG, "run: HttpURLConnection failed ");
+            if (listener != null) {
+                listener.onFailed("HttpURLConnection failed ");
+            }
             e.printStackTrace();
         } finally {
             if (in != null) {
@@ -199,4 +216,14 @@ public class DownLoadTask {
 
     }
 
+    /**
+     * 下载进度的监听方法
+     */
+    interface OnDownLoadListener {
+        void onSuccess(String path);//下载成功
+
+        void onFailed(String error);//现在失败
+
+        void onLength(int len);//进度百分比
+    }
 }

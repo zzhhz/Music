@@ -21,7 +21,6 @@ import android.widget.PopupWindow;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.google.common.base.Strings;
 import com.zzh.music.MusicApplication;
 import com.zzh.music.MusicConstants;
 import com.zzh.music.R;
@@ -37,6 +36,7 @@ import com.zzh.music.ui.view.PopWindow;
 import com.zzh.music.ui.view.RelativeLayoutBlurredView;
 import com.zzh.music.utils.BlurredBitmapUtil;
 import com.zzh.music.utils.MusicLoader;
+import com.zzh.music.utils.ZHUtils;
 import com.zzh.music.utils.web.BaseSubscriber;
 import com.zzh.music.utils.web.GlideUtils;
 import com.zzh.music.utils.web.RetrofitUtils;
@@ -44,6 +44,7 @@ import com.zzh.music.widget.CDView;
 import com.zzh.music.widget.LrcView;
 import com.zzh.zlibs.swipe.SwipeBackLayout;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -195,7 +196,7 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
                                     @Override
                                     public void run() {
                                         super.run();
-                                        Bitmap bitmap = BlurredBitmapUtil.fastblur(mContext, resource, 10);
+                                        Bitmap bitmap = BlurredBitmapUtil.fastBlur(resource, 10);
                                         Message message = mHandler.obtainMessage();
                                         message.obj = bitmap;
                                         message.what = SET_BACKGROUND;
@@ -207,7 +208,13 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
                         }
                     });
 
-                    //DownLoadTask.getInstance().start(mMusic.getMusicPath(), );
+                    StringBuilder musicPath = new StringBuilder(ZHUtils.getCurrentMusicPath());
+                    musicPath.append(File.separator).append(mMusic.getMusicName());
+                    if (!musicPath.toString().endsWith(".mp3")) {
+                        musicPath.append(".mp3");
+                    }
+
+                    DownLoadTask.getInstance().start(mMusic.getMusicPath(), musicPath.toString());
 
                     if (mMusicService != null) {
                         mMusicService.playMusic(mMusic);

@@ -1,6 +1,11 @@
 package com.zzh.music.utils;
 
+import android.os.Environment;
+import android.support.annotation.NonNull;
+
 import com.zzh.zlibs.utils.ZUtils;
+
+import java.io.File;
 
 /**
  * ----------Dragon be here!----------/
@@ -32,6 +37,55 @@ import com.zzh.zlibs.utils.ZUtils;
  */
 
 public class ZHUtils extends ZUtils {
+    /**
+     * 程序的文件路径
+     *
+     * @return
+     */
+    @NonNull
+    public static String getCurrentPath() {
+        StringBuilder builder = new StringBuilder(ZUtils.getSDCardDirectory(Environment.DIRECTORY_MUSIC));
+        builder.append(File.separator).append("ZZH");
+        return builder.toString();
+    }
 
+    /**
+     * 存放音乐的路径
+     *
+     * @return
+     */
+    @NonNull
+    public static String getCurrentMusicPath() {
+        StringBuilder builder = new StringBuilder(getCurrentPath());
+        builder.append(File.separator).append("songs");
+        return builder.toString();
+    }
 
+    /**
+     * 存放歌词的路径
+     *
+     * @return
+     */
+    @NonNull
+    public static String getCurrentLrcPath() {
+        StringBuilder builder = new StringBuilder(getCurrentPath());
+        builder.append(File.separator).append("lrc");
+        return builder.toString();
+    }
+
+    /**
+     * 初始化接口
+     */
+    public static void init() {
+        String musicPath = getCurrentMusicPath();
+        String lrcPath = getCurrentLrcPath();
+        File musicFile = new File(musicPath);
+        File lrcFile = new File(lrcPath);
+        if (!musicFile.exists()) {
+            musicFile.mkdirs();
+        }
+        if (!lrcFile.exists()) {
+            lrcFile.mkdirs();
+        }
+    }
 }

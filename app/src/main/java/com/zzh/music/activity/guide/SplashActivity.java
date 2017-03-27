@@ -13,8 +13,11 @@ import android.widget.ImageView;
 
 import com.zzh.music.MainActivity;
 import com.zzh.music.R;
+import com.zzh.music.base.BaseMusicNoSwipeActivity;
 import com.zzh.music.service.MusicService;
+import com.zzh.music.utils.ZHUtils;
 import com.zzh.zlibs.base.BaseNoSwipeBackActivity;
+import com.zzh.zlibs.utils.ZUtils;
 
 /**
  * Created by ZZH on 16/11/22
@@ -25,8 +28,9 @@ import com.zzh.zlibs.base.BaseNoSwipeBackActivity;
  * @Author: zzh
  * @Description: 程序的闪屏页
  */
-public class SplashActivity extends BaseNoSwipeBackActivity {
+public class SplashActivity extends BaseMusicNoSwipeActivity {
     private ImageView mSplash;
+    private boolean isRequest = false;
 
     @Override
     protected int setLayoutId() {
@@ -38,6 +42,7 @@ public class SplashActivity extends BaseNoSwipeBackActivity {
         Intent intent = new Intent(this, MusicService.class);
         startService(intent);
         mSplash = (ImageView) findViewById(R.id.riv_splash);
+        requestReadStoragePermission();
         PropertyValuesHolder valuesHolderX = PropertyValuesHolder.ofFloat("scaleX", 1, 1.5f);
         PropertyValuesHolder valuesHolderY = PropertyValuesHolder.ofFloat("scaleY", 1, 1.5f);
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(mSplash, valuesHolderX, valuesHolderY);
@@ -52,7 +57,7 @@ public class SplashActivity extends BaseNoSwipeBackActivity {
             @Override
             public void onAnimationEnd(Animator animation) {
                 Log.d(TAG, "onAnimationEnd: end---------------");
-                mHandler.sendEmptyMessage(0);
+
             }
 
             @Override
@@ -89,8 +94,20 @@ public class SplashActivity extends BaseNoSwipeBackActivity {
 
     }
 
+
     @Override
     public void onClick(View v) {
+    }
+
+    @Override
+    protected void notifyPermission(int code, boolean flag) {
+        isRequest = flag;
+        if (flag) {
+            ZHUtils.init();
+            mHandler.sendEmptyMessage(0);
+        } else {
+            this.finish();
+        }
     }
 
     @Override

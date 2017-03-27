@@ -8,4 +8,5 @@
     <dimen name="font_msg_size">14sp</dimen>
     <dimen name="play_btn_distance">15dp</dimen>
     <dimen name="play_left_right_btn_distance">20dp</dimen>
+    <dimen name="nav_bar_height">0dp</dimen>
 </resources>

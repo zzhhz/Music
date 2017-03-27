@@ -3,11 +3,14 @@ package com.zzh.music;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.zzh.zlibs.utils.ZUtils;
 
+import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -55,5 +58,4 @@ public class MusicApplication extends Application {
         mWindowManager.getDefaultDisplay().getMetrics(metric);
         return metric.heightPixels; // 屏幕宽度（像素）
     }
-
 }

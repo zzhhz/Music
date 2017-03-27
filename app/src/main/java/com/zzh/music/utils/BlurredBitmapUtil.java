@@ -130,7 +130,7 @@ public class BlurredBitmapUtil {
      * @param radius
      * @return
      */
-    public static Bitmap fastblur(Context context, Bitmap sentBitmap, int radius) {
+    public static Bitmap fastBlur(Bitmap sentBitmap, int radius) {
         Bitmap bitmap = sentBitmap.copy(sentBitmap.getConfig(), true);
         if (radius < 1) {
             return (null);
