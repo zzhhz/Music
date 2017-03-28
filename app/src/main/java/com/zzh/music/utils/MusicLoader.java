@@ -243,6 +243,11 @@ public class MusicLoader {
     private static Bitmap mCachedBit = null;
     private static final BitmapFactory.Options sBitmapOptions = new BitmapFactory.Options();
 
+    /**
+     * 将自己下载的音乐插入到系统数据库中
+     *
+     * @param music
+     */
     public void insert(Music music) {
         String mimeType = "audio/*";
         ContentValues values = new ContentValues();
@@ -257,5 +262,6 @@ public class MusicLoader {
         Uri uri = MediaStore.Audio.Media.getContentUriForPath(music.getMusicPath());
         mContext.getContentResolver().delete(uri, null, null);
         final Uri newUri = mContext.getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
+        Log.d(TAG, "insert new music : " + newUri);
     }
 }

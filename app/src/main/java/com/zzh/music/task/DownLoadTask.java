@@ -107,20 +107,35 @@ public class DownLoadTask {
         return mInstance;
     }
 
-    public void start(final String fileUrl, final String save2Path) {
+    /**
+     * 将下载线程添加到下载序列中
+     *
+     * @param fileUrl   网络文件的路径
+     * @param save2Path 保存本地的路径
+     * @param listener  文件的监听
+     */
+    public void start(final String fileUrl, final String save2Path, final OnDownLoadListener listener) {
         addTasks(new Runnable() {
             @Override
             public void run() {
-                getFiles(save2Path, fileUrl);
+                getFiles(save2Path, fileUrl, listener);
                 mSemaphoreThreadPool.release();//释放一个信号量
             }
         });
     }
 
+    //开启下载，不设置监听
     private void getFiles(String save2Path, String fileUrl) {
         getFiles(save2Path, fileUrl, null);
     }
 
+    /**
+     * 开启下载，
+     *
+     * @param save2Path 文件保存的下载路径
+     * @param fileUrl   文件的网络地址
+     * @param listener  下载过程的监听
+     */
     private void getFiles(String save2Path, String fileUrl, OnDownLoadListener listener) {
         File localFile = new File(save2Path);
         FileOutputStream fos = null; //写文件

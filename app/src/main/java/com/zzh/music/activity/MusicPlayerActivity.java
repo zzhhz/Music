@@ -214,7 +214,9 @@ public class MusicPlayerActivity extends BaseMusicActivity implements Toolbar.On
                         musicPath.append(".mp3");
                     }
 
-                    DownLoadTask.getInstance().start(mMusic.getMusicPath(), musicPath.toString());
+                    if (ZHUtils.isNetWork(mContext)) {
+                        DownLoadTask.getInstance().start(mMusic.getMusicPath(), musicPath.toString(), null);
+                    }
 
                     if (mMusicService != null) {
                         mMusicService.playMusic(mMusic);
